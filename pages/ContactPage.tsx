@@ -1,11 +1,16 @@
 import React from 'react';
 import { Breadcrumbs } from '../components/Breadcrumbs';
+import type { Page } from '../App';
 
-export const ContactPage: React.FC = () => {
+interface ContactPageProps {
+    navigateTo: (page: Page) => void;
+}
+
+export const ContactPage: React.FC<ContactPageProps> = ({ navigateTo }) => {
     return (
         <div className="bg-white py-12">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <Breadcrumbs items={[{ label: 'হোম', href: '#' }, { label: 'যোগাযোগ' }]} />
+                <Breadcrumbs items={[{ label: 'হোম', onClick: () => navigateTo('home') }, { label: 'যোগাযোগ' }]} />
                 <div className="mt-8">
                     <h1 className="text-3xl font-bold text-gray-900 text-center">যোগাযোগ করুন</h1>
                     <p className="text-center mt-2 text-gray-600">যেকোনো প্রয়োজনে আমাদের সাথে যোগাযোগ করতে পারেন।</p>

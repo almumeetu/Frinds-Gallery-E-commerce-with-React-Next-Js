@@ -9,6 +9,7 @@ interface DealOfTheDayProps {
     toggleWishlist: (productId: string) => void;
     addToCart: (productId: string, quantity: number) => void;
     buyNow: (productId: string, quantity: number) => void;
+    onQuickView: (product: Product) => void;
 }
 
 const CountdownTimer = () => {
@@ -51,7 +52,7 @@ const CountdownTimer = () => {
 export const DealOfTheDay: React.FC<DealOfTheDayProps> = (props) => {
     return (
         <section className="bg-brand-dark py-12 md:py-16">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white">
+            <div className="w-full px-4 sm:px-6 lg:px-8 text-white">
                  <div className="sm:flex justify-between items-center mb-8 text-center sm:text-left">
                      <div>
                         <h2 className="text-3xl font-bold sm:text-4xl">ডিল অফ দ্য ডে</h2>

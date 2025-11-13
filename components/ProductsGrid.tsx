@@ -9,11 +9,12 @@ interface ProductsGridProps {
     buyNow: (productId: string, quantity: number) => void;
     wishlist: string[];
     toggleWishlist: (productId: string) => void;
+    onQuickView: (product: Product) => void;
 }
 
-export const ProductsGrid: React.FC<ProductsGridProps> = ({ products, onProductSelect, addToCart, buyNow, wishlist, toggleWishlist }) => {
+export const ProductsGrid: React.FC<ProductsGridProps> = ({ products, onProductSelect, addToCart, buyNow, wishlist, toggleWishlist, onQuickView }) => {
     return (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:gap-6">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 lg:gap-6">
             {products.map(product => (
                 <MobileProductCard 
                     key={product.id} 
@@ -23,6 +24,7 @@ export const ProductsGrid: React.FC<ProductsGridProps> = ({ products, onProductS
                     buyNow={buyNow}
                     isInWishlist={wishlist.includes(product.id)}
                     toggleWishlist={toggleWishlist}
+                    onQuickView={onQuickView}
                 />
             ))}
         </div>

@@ -22,6 +22,18 @@ export interface Review {
     quote: string;
     author: string;
     location: string;
+    rating: number;
+    avatarUrl: string;
+}
+
+export interface ProductReview {
+  id: string;
+  productId: string;
+  author: string;
+  email: string;
+  rating: number;
+  comment: string;
+  date: string;
 }
 
 export interface CartItem {
@@ -33,6 +45,7 @@ export enum OrderStatus {
   Processing = 'প্রক্রিয়াধীন',
   Shipped = 'শিপিং-এ',
   Delivered = 'পৌঁছে গেছে',
+  Cancelled = 'বাতিল',
   NotFound = 'অর্ডার খুঁজে পাওয়া যায়নি',
 }
 
@@ -46,4 +59,34 @@ export interface OrderDetails {
     orderId: string;
     customerName: string;
     totalAmount: number;
+}
+
+export interface OrderItem {
+    productId: string;
+    quantity: number;
+    price: number; // Price at the time of order
+}
+
+export interface Order {
+    id: string;
+    orderId: string;
+    customerName: string;
+    date: string;
+    totalAmount: number;
+    status: 'প্রক্রিয়াধীন' | 'শিপিং-এ' | 'পৌঁছে গেছে' | 'বাতিল';
+    items: OrderItem[];
+    shippingAddress: string;
+    customerId?: string;
+}
+
+export interface Customer {
+    id: string;
+    name: string;
+    email: string;
+    phone: string;
+    totalOrders: number;
+    totalSpent: number;
+    joinDate: string;
+    password?: string;
+    orderIds: string[];
 }

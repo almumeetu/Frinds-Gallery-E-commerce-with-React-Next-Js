@@ -8,6 +8,7 @@ interface MobileProductCardProps {
   buyNow: (productId: string, quantity: number) => void;
   isInWishlist: boolean;
   toggleWishlist: (productId: string) => void;
+  onQuickView: (product: Product) => void;
 }
 
 const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
@@ -29,16 +30,16 @@ const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
 };
 
 
-export const MobileProductCard: React.FC<MobileProductCardProps> = ({ product, onProductSelect, addToCart, buyNow, isInWishlist, toggleWishlist }) => {
+export const MobileProductCard: React.FC<MobileProductCardProps> = ({ product, onProductSelect, addToCart, buyNow, isInWishlist, toggleWishlist, onQuickView }) => {
   const discount = product.originalPrice && product.originalPrice > product.price 
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) 
     : 0;
     
   return (
-    <div className="w-full bg-white rounded-lg border border-gray-200/80 overflow-hidden group flex flex-col text-left relative transition-shadow hover:shadow-lg">
+    <div className="w-full h-full bg-white rounded-lg border border-gray-200/80 overflow-hidden group flex flex-col text-left relative transition-all duration-300 hover:shadow-xl">
       <div className="relative cursor-pointer" onClick={() => onProductSelect(product)}>
         <img 
-          className="w-full h-48 sm:h-64 object-cover transform transition-transform duration-300 group-hover:scale-105" 
+          className="w-full h-48 sm:h-64 object-cover transform transition-transform duration-300 group-hover:scale-110" 
           src={product.imageUrl} 
           alt={product.name} 
         />
@@ -59,31 +60,49 @@ export const MobileProductCard: React.FC<MobileProductCardProps> = ({ product, o
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 016.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z"></path>
           </svg>
         </button>
+         {product.stock > 0 && (
+          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-opacity duration-300 flex items-center justify-center z-10">
+              <button
+                  onClick={(e) => {
+                      e.stopPropagation();
+                      onQuickView(product);
+                  }}
+                  className="text-white bg-brand-dark bg-opacity-80 hover:bg-opacity-100 px-4 py-2 rounded-full text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  aria-label="Quick view"
+              >
+                  দ্রুত দেখুন
+              </button>
+          </div>
+        )}
         {product.stock === 0 && (
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
             <span className="text-white font-bold text-lg">স্টক শেষ</span>
           </div>
         )}
       </div>
-      <div className="p-3 flex flex-col flex-grow">
-        <span className="text-xs text-gray-500">{product.category}</span>
-        <h3 
-          className="text-sm font-semibold text-gray-800 cursor-pointer hover:text-brand-green mt-1 flex-grow"
-          onClick={() => onProductSelect(product)}
-        >
-          {product.name}
-        </h3>
-        <div className="flex items-center mt-2 space-x-1">
-          <StarRating rating={product.rating} />
-          <span className="text-xs text-gray-500">({product.reviewCount})</span>
+      <div className="p-4 flex flex-col flex-grow">
+        <div className="flex-grow">
+            <span className="text-sm text-gray-500">{product.category}</span>
+            <h3 
+              className="text-lg leading-snug font-semibold text-gray-800 cursor-pointer hover:text-brand-green mt-1"
+              onClick={() => onProductSelect(product)}
+            >
+              {product.name}
+            </h3>
+            <div className="flex items-center mt-2 space-x-1">
+              <StarRating rating={product.rating} />
+              <span className="text-sm text-gray-500">({product.reviewCount})</span>
+            </div>
         </div>
-        <div className="mt-3">
-          <span className="text-lg font-bold text-brand-green">৳{product.price.toLocaleString('bn-BD')}</span>
+        
+        <div className="mt-4">
+          <span className="text-2xl font-bold text-brand-green">৳{product.price.toLocaleString('bn-BD')}</span>
           {product.originalPrice && (
-              <span className="text-sm text-gray-500 line-through ml-2">৳{product.originalPrice.toLocaleString('bn-BD')}</span>
+              <span className="text-base text-gray-500 line-through ml-2">৳{product.originalPrice.toLocaleString('bn-BD')}</span>
           )}
         </div>
-        <div className="mt-3 space-y-2">
+
+        <div className="mt-4 space-y-2">
             <button
                 onClick={(e) => {
                     e.stopPropagation();

@@ -9,7 +9,7 @@ const featureData = [
 
 export const FeatureCards: React.FC = () => {
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {featureData.map((feature, index) => (
                     <a href={feature.link} key={index} className="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-brand-green hover:text-white transition-colors group">

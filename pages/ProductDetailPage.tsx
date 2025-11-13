@@ -1,26 +1,57 @@
-import React, { useState } from 'react';
-import type { Product } from '../types';
+import React, { useState, useEffect } from 'react';
+import type { Product, ProductReview } from '../types';
 import { Breadcrumbs } from '../components/Breadcrumbs';
+import { ProductCarousel } from '../components/ProductCarousel';
+import { categories, mockProductReviews } from '../constants';
+import type { Page } from '../App';
+import { ProductReviews } from '../components/ProductReviews';
 
 interface ProductDetailPageProps {
   product: Product;
+  allProducts: Product[];
   addToCart: (productId: string, quantity: number) => void;
+  buyNow: (productId: string, quantity: number) => void;
   wishlist: string[];
   toggleWishlist: (productId: string) => void;
+  onProductSelect: (product: Product) => void;
+  onQuickView: (product: Product) => void;
+  navigateTo: (page: Page) => void;
+  navigateToShop: (categoryId: string) => void;
 }
 
-export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product, addToCart, wishlist, toggleWishlist }) => {
+export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product, allProducts, addToCart, buyNow, wishlist, toggleWishlist, onProductSelect, onQuickView, navigateTo, navigateToShop }) => {
   const [quantity, setQuantity] = useState(1);
+  const [reviews, setReviews] = useState<ProductReview[]>([]);
+
+  useEffect(() => {
+    setReviews(mockProductReviews.filter(r => r.productId === product.id));
+    // Reset quantity to 1 when product changes
+    setQuantity(1);
+    window.scrollTo(0, 0);
+  }, [product]);
+
+  const handleReviewSubmit = (newReviewData: Omit<ProductReview, 'id' | 'date'>) => {
+    const newReview: ProductReview = {
+      ...newReviewData,
+      id: `rev_${Date.now()}`,
+      date: new Date().toISOString(),
+    };
+    setReviews(prevReviews => [newReview, ...prevReviews]);
+  };
+
   const isInWishlist = wishlist.includes(product.id);
   
   const discount = product.originalPrice && product.originalPrice > product.price 
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) 
     : 0;
     
+  const relatedProducts = allProducts.filter(p => p.category === product.category && p.id !== product.id).slice(0, 8);
+  const categoryName = categories.find(c => c.id === product.category)?.name || product.category;
+    
   return (
     <div className="bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Breadcrumbs items={[{ label: 'হোম', href: '#' }, { label: product.category, href: '#' }, { label: product.name }]} />
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
+        <Breadcrumbs items={[{ label: 'হোম', onClick: () => navigateTo('home') }, { label: categoryName, onClick: () => navigateToShop(product.category) }, { label: product.name }]} />
 
         <div className="mt-6 md:grid md:grid-cols-2 md:gap-x-8">
           {/* Image gallery */}
@@ -34,15 +65,15 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product, a
 
           {/* Product info */}
           <div className="mt-4 md:mt-0">
-            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-gray-900">{product.name}</h1>
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900">{product.name}</h1>
             <p className="text-sm text-gray-500 mt-2">SKU: {product.sku}</p>
 
             <div className="mt-3">
               <h2 className="sr-only">Product price</h2>
               <div className="flex items-baseline space-x-2">
-                <p className="text-3xl text-brand-green font-bold">৳{product.price.toLocaleString('bn-BD')}</p>
+                <p className="text-4xl text-brand-green font-bold">৳{product.price.toLocaleString('bn-BD')}</p>
                  {product.originalPrice && (
-                    <p className="text-xl text-gray-500 line-through">৳{product.originalPrice.toLocaleString('bn-BD')}</p>
+                    <p className="text-2xl text-gray-500 line-through">৳{product.originalPrice.toLocaleString('bn-BD')}</p>
                 )}
                 {discount > 0 && (
                     <span className="text-sm font-semibold text-red-600">({discount}% ছাড়)</span>
@@ -89,12 +120,36 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product, a
                 </button>
             </div>
              <button
+                onClick={() => buyNow(product.id, quantity)}
                 disabled={product.stock === 0}
                 className="w-full mt-4 bg-brand-green text-white py-3 px-8 border border-transparent rounded-md font-bold hover:bg-brand-green-dark disabled:bg-gray-400"
                 >
                 এখনই কিনুন
             </button>
           </div>
+        </div>
+        
+        {relatedProducts.length > 0 && (
+            <div className="mt-16">
+                <ProductCarousel
+                    title="সম্পর্কিত পণ্য"
+                    products={relatedProducts}
+                    onProductSelect={onProductSelect}
+                    wishlist={wishlist}
+                    toggleWishlist={toggleWishlist}
+                    addToCart={addToCart}
+                    buyNow={buyNow}
+                    onQuickView={onQuickView}
+                />
+            </div>
+        )}
+        
+        <div className="mt-16">
+            <ProductReviews 
+                productId={product.id}
+                reviews={reviews}
+                onSubmitReview={handleReviewSubmit}
+            />
         </div>
       </div>
     </div>

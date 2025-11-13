@@ -1,4 +1,4 @@
-
+/*
 import { Schema, model, Document } from 'mongoose';
 
 interface IUser extends Document {
@@ -27,3 +27,4 @@ const UserSchema = new Schema<IUser>({
 
 // The model will be created in your Node.js backend like this:
 // export const UserModel = model<IUser>('User', UserSchema);
+*/

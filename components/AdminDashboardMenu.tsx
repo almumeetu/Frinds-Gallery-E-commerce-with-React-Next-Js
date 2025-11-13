@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 const menuItems = [
     { id: 'dashboard', label: 'ড্যাশবোর্ড', icon: '📊' },
@@ -8,8 +8,12 @@ const menuItems = [
     { id: 'settings', label: 'সেটিংস', icon: '⚙️' },
 ];
 
-export const AdminDashboardMenu: React.FC = () => {
-    const [activeItem, setActiveItem] = useState('dashboard');
+interface AdminDashboardMenuProps {
+    activeView: string;
+    setActiveView: (view: string) => void;
+}
+
+export const AdminDashboardMenu: React.FC<AdminDashboardMenuProps> = ({ activeView, setActiveView }) => {
     return (
         <div className="bg-white p-4 rounded-lg shadow-sm border">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">মেনু</h3>
@@ -17,9 +21,9 @@ export const AdminDashboardMenu: React.FC = () => {
                 {menuItems.map(item => (
                      <li key={item.id}>
                         <button
-                            onClick={() => setActiveItem(item.id)}
+                            onClick={() => setActiveView(item.id)}
                             className={`w-full flex items-center text-left px-3 py-2.5 rounded-md text-sm transition-colors ${
-                            activeItem === item.id
+                            activeView === item.id
                                 ? 'bg-brand-green text-white font-semibold shadow'
                                 : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                             }`}

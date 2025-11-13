@@ -1,11 +1,16 @@
 import React from 'react';
 import { Breadcrumbs } from '../components/Breadcrumbs';
+import type { Page } from '../App';
 
-export const TermsPage: React.FC = () => {
+interface TermsPageProps {
+    navigateTo: (page: Page) => void;
+}
+
+export const TermsPage: React.FC<TermsPageProps> = ({ navigateTo }) => {
     return (
         <div className="bg-white py-12">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <Breadcrumbs items={[{ label: 'হোম', href: '#' }, { label: 'শর্তাবলী' }]} />
+                <Breadcrumbs items={[{ label: 'হোম', onClick: () => navigateTo('home') }, { label: 'শর্তাবলী' }]} />
                 <div className="mt-8 prose prose-lg max-w-none text-gray-700">
                     <h1 className="text-3xl font-bold text-gray-900">শর্তাবলী</h1>
                     <p>ফ্রেন্ডস গ্যালারি ০.৭ ওয়েবসাইট ব্যবহার করার জন্য আপনাকে ধন্যবাদ। এই ওয়েবসাইট ব্যবহার করার আগে দয়া করে নিম্নলিখিত শর্তাবলী মনোযোগ সহকারে পড়ুন।</p>

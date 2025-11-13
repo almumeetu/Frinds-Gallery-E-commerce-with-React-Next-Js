@@ -10,34 +10,36 @@ interface TopCategoriesProps {
   toggleWishlist: (productId: string) => void;
   addToCart: (productId: string, quantity: number) => void;
   buyNow: (productId: string, quantity: number) => void;
+  onQuickView: (product: Product) => void;
+  navigateToShop: (categoryId: string) => void;
 }
 
 const categoryIcons = [
     '👗', '👘', '🧣', '👙', '🧤'
 ];
 
-export const TopCategories: React.FC<TopCategoriesProps> = ({ categories, products, onProductSelect, wishlist, toggleWishlist, addToCart, buyNow }) => {
+export const TopCategories: React.FC<TopCategoriesProps> = ({ categories, products, onProductSelect, wishlist, toggleWishlist, addToCart, buyNow, onQuickView, navigateToShop }) => {
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="w-full px-4 sm:px-6 lg:px-8">
       <div className="text-center">
         <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">টপ ক্যাটাগরি</h2>
         <p className="mt-2 text-gray-500">সবার পছন্দের সেরা কালেকশনগুলো দেখুন</p>
       </div>
       <div className="mt-10 flex justify-center flex-wrap gap-4 sm:gap-8">
         {categories.map((category, index) => (
-          <a key={category.id} href="#" className="flex flex-col items-center group">
+          <button key={category.id} onClick={() => navigateToShop(category.id)} className="flex flex-col items-center group">
             <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center text-4xl group-hover:bg-brand-green transition-colors">
                 {categoryIcons[index % categoryIcons.length]}
             </div>
-            <h3 className="mt-3 font-semibold text-gray-700 group-hover:text-brand-green">{category.name}</h3>
-          </a>
+            <h3 className="mt-3 font-semibold text-gray-700 group-hover:text-brand-green text-lg">{category.name}</h3>
+          </button>
         ))}
       </div>
       <div className="mt-12">
-        <ProductsGrid products={products} onProductSelect={onProductSelect} addToCart={addToCart} buyNow={buyNow} wishlist={wishlist} toggleWishlist={toggleWishlist} />
+        <ProductsGrid products={products} onProductSelect={onProductSelect} addToCart={addToCart} buyNow={buyNow} wishlist={wishlist} toggleWishlist={toggleWishlist} onQuickView={onQuickView} />
       </div>
        <div className="text-center mt-8">
-         <button className="font-semibold text-brand-green border border-brand-green rounded-full px-6 py-2 hover:bg-brand-green hover:text-white transition-colors">
+         <button onClick={() => navigateToShop('all')} className="font-semibold text-brand-green border border-brand-green rounded-full px-6 py-2 hover:bg-brand-green hover:text-white transition-colors">
             সকল পণ্য দেখুন &rarr;
          </button>
        </div>

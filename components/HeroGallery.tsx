@@ -7,7 +7,7 @@ interface HeroGalleryProps {
 
 export const HeroGallery: React.FC<HeroGalleryProps> = ({ navigateTo }) => {
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+        <div className="w-full px-4 sm:px-6 lg:px-8 pt-4">
             <div className="relative bg-gray-200 h-64 md:h-[450px] rounded-lg overflow-hidden">
                 <div className="absolute inset-0">
                     <img 
@@ -17,7 +17,7 @@ export const HeroGallery: React.FC<HeroGalleryProps> = ({ navigateTo }) => {
                     />
                     <div className="absolute inset-0 bg-black opacity-30"></div>
                 </div>
-                <div className="relative max-w-7xl mx-auto h-full flex items-center justify-start text-left px-8 md:px-16">
+                <div className="relative w-full h-full flex items-center justify-start text-left px-8 md:px-16">
                     <div>
                         <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl drop-shadow-lg">
                            সেরা কালেকশন সেরা দামে

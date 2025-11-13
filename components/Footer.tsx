@@ -4,6 +4,7 @@ import type { Page } from '../App';
 
 interface FooterProps {
     navigateTo: (page: Page) => void;
+    navigateToShop: (categoryId: string) => void;
 }
 
 const Logo = () => (
@@ -14,11 +15,11 @@ const Logo = () => (
     </div>
 );
 
-export const Footer: React.FC<FooterProps> = ({ navigateTo }) => {
+export const Footer: React.FC<FooterProps> = ({ navigateTo, navigateToShop }) => {
     return (
         <footer className="bg-gray-50 text-gray-600 border-t">
             <ServiceInfo />
-            <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div className="w-full mx-auto py-12 px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {/* About and Subscribe */}
                     <div className="space-y-4 col-span-1 md:col-span-2 lg:col-span-1">
@@ -37,11 +38,11 @@ export const Footer: React.FC<FooterProps> = ({ navigateTo }) => {
                     <div>
                         <h3 className="text-lg font-semibold text-gray-800">শপ ক্যাটাগরি</h3>
                         <ul className="mt-4 space-y-2 text-sm">
-                            <li><button onClick={() => navigateTo('shop')} className="hover:text-brand-green">লং খিমার</button></li>
-                            <li><button onClick={() => navigateTo('shop')} className="hover:text-brand-green">হিজাব কালেকশন</button></li>
-                            <li><button onClick={() => navigateTo('shop')} className="hover:text-brand-green">থ্রি-পিস</button></li>
-                            <li><button onClick={() => navigateTo('shop')} className="hover:text-brand-green">ইনার কালেকশন</button></li>
-                            <li><button onClick={() => navigateTo('shop')} className="hover:text-brand-green">ইসলামিক আইটেম</button></li>
+                            <li><button onClick={() => navigateToShop('long-khimar')} className="hover:text-brand-green">লং খিমার</button></li>
+                            <li><button onClick={() => navigateToShop('hijab')} className="hover:text-brand-green">হিজাব কালেকশন</button></li>
+                            <li><button onClick={() => navigateToShop('three-piece')} className="hover:text-brand-green">থ্রি-পিস</button></li>
+                            <li><button onClick={() => navigateToShop('innar-collection')} className="hover:text-brand-green">ইনার কালেকশন</button></li>
+                            <li><button onClick={() => navigateToShop('islamic-item')} className="hover:text-brand-green">ইসলামিক আইটেম</button></li>
                         </ul>
                     </div>
                     
@@ -77,7 +78,7 @@ export const Footer: React.FC<FooterProps> = ({ navigateTo }) => {
                 </div>
             </div>
              <div className="border-t bg-white">
-                <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center text-sm">
+                <div className="w-full mx-auto py-4 px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center text-sm">
                     <p className="text-gray-500">&copy; ২০২৪ ফ্রেন্ডস গ্যালারি ০.৭। সর্বস্বত্ব সংরক্ষিত।</p>
                     <div className="flex space-x-2 mt-4 sm:mt-0 items-center">
                         <span className="text-gray-500">পেমেন্ট মেথড:</span>

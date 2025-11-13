@@ -1,4 +1,4 @@
-
+/*
 import { Schema, model, Document, Types } from 'mongoose';
 
 interface IOrder extends Document {
@@ -49,3 +49,4 @@ const OrderSchema = new Schema<IOrder>({
 
 // The model will be created in your Node.js backend like this:
 // export const OrderModel = model<IOrder>('Order', OrderSchema);
+*/

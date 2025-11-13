@@ -1,17 +1,17 @@
 import React from 'react';
-import type { CartItem } from '../types';
+import type { Product, CartItem } from '../types';
 import type { Page } from '../App';
-import { mockProducts } from '../constants';
 
 interface FloatingCartProps {
   cart: CartItem[];
+  products: Product[];
   navigateTo: (page: Page) => void;
 }
 
-export const FloatingCart: React.FC<FloatingCartProps> = ({ cart, navigateTo }) => {
+export const FloatingCart: React.FC<FloatingCartProps> = ({ cart, products, navigateTo }) => {
   const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   const total = cart.reduce((sum, item) => {
-    const product = mockProducts.find(p => p.id === item.productId);
+    const product = products.find(p => p.id === item.productId);
     return sum + (product ? product.price * item.quantity : 0);
   }, 0);
 

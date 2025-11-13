@@ -1,4 +1,4 @@
-
+/*
 import { Schema, model, Document } from 'mongoose';
 
 interface IProduct extends Document {
@@ -25,3 +25,4 @@ const ProductSchema = new Schema<IProduct>({
 
 // The model will be created in your Node.js backend like this:
 // export const ProductModel = model<IProduct>('Product', ProductSchema);
+*/

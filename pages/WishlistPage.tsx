@@ -1,26 +1,27 @@
 import React from 'react';
 import { ProductsGrid } from '../components/ProductsGrid';
 import { Breadcrumbs } from '../components/Breadcrumbs';
-import { mockProducts } from '../constants';
 import type { Product } from '../types';
 import type { Page } from '../App';
 
 interface WishlistPageProps {
+    products: Product[];
     wishlistProductIds: string[];
     onProductSelect: (product: Product) => void;
     addToCart: (productId: string, quantity: number) => void;
     buyNow: (productId: string, quantity: number) => void;
     toggleWishlist: (productId: string) => void;
     navigateTo: (page: Page) => void;
+    onQuickView: (product: Product) => void;
 }
 
-export const WishlistPage: React.FC<WishlistPageProps> = ({ wishlistProductIds, onProductSelect, addToCart, buyNow, toggleWishlist, navigateTo }) => {
-    const wishlistProducts = mockProducts.filter(p => wishlistProductIds.includes(p.id));
+export const WishlistPage: React.FC<WishlistPageProps> = ({ products, wishlistProductIds, onProductSelect, addToCart, buyNow, toggleWishlist, navigateTo, onQuickView }) => {
+    const wishlistProducts = products.filter(p => wishlistProductIds.includes(p.id));
 
     return (
         <div className="bg-white">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <Breadcrumbs items={[{ label: 'হোম', href: '#' }, { label: 'আমার পছন্দের তালিকা' }]} />
+            <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
+                <Breadcrumbs items={[{ label: 'হোম', onClick: () => navigateTo('home') }, { label: 'আমার পছন্দের তালিকা' }]} />
                 
                 <div className="mt-6">
                     <h1 className="text-3xl font-bold text-gray-900">আমার পছন্দের তালিকা</h1>
@@ -34,6 +35,7 @@ export const WishlistPage: React.FC<WishlistPageProps> = ({ wishlistProductIds, 
                                 buyNow={buyNow}
                                 wishlist={wishlistProductIds}
                                 toggleWishlist={toggleWishlist}
+                                onQuickView={onQuickView}
                             />
                         </div>
                     ) : (

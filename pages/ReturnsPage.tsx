@@ -1,11 +1,16 @@
 import React from 'react';
 import { Breadcrumbs } from '../components/Breadcrumbs';
+import type { Page } from '../App';
 
-export const ReturnsPage: React.FC = () => {
+interface ReturnsPageProps {
+    navigateTo: (page: Page) => void;
+}
+
+export const ReturnsPage: React.FC<ReturnsPageProps> = ({ navigateTo }) => {
     return (
         <div className="bg-white py-12">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <Breadcrumbs items={[{ label: 'হোম', href: '#' }, { label: 'রিটার্ন ও রিফান্ড পলিসি' }]} />
+                <Breadcrumbs items={[{ label: 'হোম', onClick: () => navigateTo('home') }, { label: 'রিটার্ন ও রিফান্ড পলিসি' }]} />
                 <div className="mt-8 prose prose-lg max-w-none text-gray-700">
                     <h1 className="text-3xl font-bold text-gray-900">রিটার্ন ও রিফান্ড পলিসি</h1>
                     <h2>রিটার্ন পলিসি</h2>

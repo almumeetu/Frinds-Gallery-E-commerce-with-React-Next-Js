@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import type { Page } from '../App';
+import { categories } from '../constants';
+import type { Customer } from '../types';
 
 interface HeaderProps {
     navigateTo: (page: Page) => void;
+    navigateToShop: (categoryId: string) => void;
     cartItemCount: number;
     wishlistItemCount: number;
+    currentUser: Customer | null;
+    onLogout: () => void;
 }
 
 const Logo = () => (
@@ -15,7 +20,7 @@ const Logo = () => (
     </div>
 );
 
-export const Header: React.FC<HeaderProps> = ({ navigateTo, cartItemCount, wishlistItemCount }) => {
+export const Header: React.FC<HeaderProps> = ({ navigateTo, navigateToShop, cartItemCount, wishlistItemCount, currentUser, onLogout }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isCategoryMenuOpen, setCategoryMenuOpen] = useState(false);
 
@@ -23,12 +28,17 @@ export const Header: React.FC<HeaderProps> = ({ navigateTo, cartItemCount, wishl
         navigateTo(page);
         setIsMenuOpen(false);
     };
+
+    const handleCategoryClick = (categoryId: string) => {
+        navigateToShop(categoryId);
+        setCategoryMenuOpen(false);
+    }
     
     return (
         <header className="bg-white sticky top-0 z-40 shadow-sm">
             {/* Top bar */}
-            <div className="bg-gray-100 text-gray-600 text-xs border-b">
-                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-1.5">
+            <div className="bg-gray-100 text-gray-600 text-sm border-b">
+                 <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-1.5">
                     <div className="flex items-center space-x-4">
                         <button onClick={() => navigateTo('about')} className="hover:text-brand-green">আমাদের সম্পর্কে</button>
                         <button onClick={() => navigateTo('contact')} className="hover:text-brand-green">যোগাযোগ</button>
@@ -43,7 +53,7 @@ export const Header: React.FC<HeaderProps> = ({ navigateTo, cartItemCount, wishl
 
             {/* Main Header */}
             <div className="py-4 border-b">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between space-x-4">
                         <div className="flex-shrink-0">
                              <button onClick={() => handleNavClick('home')} className="block">
@@ -74,8 +84,21 @@ export const Header: React.FC<HeaderProps> = ({ navigateTo, cartItemCount, wishl
                             <div className="hidden lg:flex items-center space-x-2 text-gray-600">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                                 <div className="text-sm">
-                                    <span className="block">হ্যালো, গেস্ট</span>
-                                    <button onClick={() => navigateTo('account')} className="font-semibold hover:text-brand-green">লগইন / রেজিস্টার</button>
+                                    {currentUser ? (
+                                        <>
+                                            <span className="block">হ্যালো, {currentUser.name.split(' ')[0]}</span>
+                                            <div>
+                                                <button onClick={() => navigateTo('account')} className="font-semibold hover:text-brand-green">আমার অ্যাকাউন্ট</button>
+                                                <span className="mx-1">/</span>
+                                                <button onClick={onLogout} className="font-semibold hover:text-brand-green">লগআউট</button>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <span className="block">হ্যালো, গেস্ট</span>
+                                            <button onClick={() => navigateTo('account')} className="font-semibold hover:text-brand-green">লগইন / রেজিস্টার</button>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -85,7 +108,7 @@ export const Header: React.FC<HeaderProps> = ({ navigateTo, cartItemCount, wishl
             
             {/* Bottom Nav */}
             <nav className="hidden lg:block border-b">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-12">
                         <div className="relative">
                              <button 
@@ -100,16 +123,15 @@ export const Header: React.FC<HeaderProps> = ({ navigateTo, cartItemCount, wishl
                                     onMouseEnter={() => setCategoryMenuOpen(true)}
                                     onMouseLeave={() => setCategoryMenuOpen(false)}
                                     className="absolute left-0 mt-0 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 py-1">
-                                    <button onClick={() => handleNavClick('shop')} className="block text-left w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">লং খিমার</button>
-                                    <button onClick={() => handleNavClick('shop')} className="block text-left w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">হিজাব</button>
-                                    <button onClick={() => handleNavClick('shop')} className="block text-left w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">ইনার</button>
-                                    <button onClick={() => handleNavClick('shop')} className="block text-left w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">থ্রি-পিস</button>
+                                    {categories.filter(c => c.id !== 'all').map(cat => (
+                                        <button key={cat.id} onClick={() => handleCategoryClick(cat.id)} className="block text-left w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{cat.name}</button>
+                                    ))}
                                 </div>
                             )}
                         </div>
                          <div className="flex items-center space-x-6 text-sm font-semibold text-gray-700">
                             <button onClick={() => handleNavClick('home')} className="hover:text-brand-green">হোম</button>
-                            <button onClick={() => handleNavClick('shop')} className="hover:text-brand-green">শপ</button>
+                            <button onClick={() => navigateToShop('all')} className="hover:text-brand-green">শপ</button>
                             <button onClick={() => handleNavClick('hotDeals')} className="hover:text-brand-green">হট ডিল</button>
                             <button onClick={() => handleNavClick('about')} className="hover:text-brand-green">আমাদের সম্পর্কে</button>
                             <button onClick={() => handleNavClick('contact')} className="hover:text-brand-green">যোগাযোগ</button>

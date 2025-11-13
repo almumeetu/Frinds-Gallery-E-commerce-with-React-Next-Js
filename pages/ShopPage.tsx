@@ -1,25 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ProductsGrid } from '../components/ProductsGrid';
 import { SidebarFilters } from '../components/SidebarFilters';
 import { Breadcrumbs } from '../components/Breadcrumbs';
-import { mockProducts, categories } from '../constants';
+import { categories } from '../constants';
 import type { Product } from '../types';
+import type { Page } from '../App';
 
 interface ShopPageProps {
+    products: Product[];
+    initialCategory: string;
     onProductSelect: (product: Product) => void;
     addToCart: (productId: string, quantity: number) => void;
     buyNow: (productId: string, quantity: number) => void;
     wishlist: string[];
     toggleWishlist: (productId: string) => void;
+    onQuickView: (product: Product) => void;
+    navigateTo: (page: Page) => void;
+    navigateToShop: (categoryId: string) => void;
 }
 
-export const ShopPage: React.FC<ShopPageProps> = ({ onProductSelect, addToCart, buyNow, wishlist, toggleWishlist }) => {
-    const [selectedCategory, setSelectedCategory] = useState('all');
+export const ShopPage: React.FC<ShopPageProps> = ({ products, initialCategory, onProductSelect, addToCart, buyNow, wishlist, toggleWishlist, onQuickView, navigateTo, navigateToShop }) => {
+    const [selectedCategory, setSelectedCategory] = useState(initialCategory);
     const [priceRange, setPriceRange] = useState({ min: 0, max: 10000 });
     const [availability, setAvailability] = useState('all'); // 'all', 'inStock', 'outOfStock'
     const [sortOrder, setSortOrder] = useState('default');
 
-    const filteredProducts = mockProducts
+    useEffect(() => {
+        setSelectedCategory(initialCategory);
+    }, [initialCategory]);
+
+    const filteredProducts = products
       .filter(p => selectedCategory === 'all' || p.category === selectedCategory)
       .filter(p => p.price >= priceRange.min && p.price <= priceRange.max)
       .filter(p => {
@@ -37,8 +47,8 @@ export const ShopPage: React.FC<ShopPageProps> = ({ onProductSelect, addToCart, 
 
     return (
         <div className="bg-white">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                 <Breadcrumbs items={[{ label: 'হোম', href: '#' }, { label: 'শপ' }, { label: currentCategoryName }]} />
+            <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
+                 <Breadcrumbs items={[{ label: 'হোম', onClick: () => navigateTo('home') }, { label: 'শপ', onClick: () => navigateToShop('all') }, { label: currentCategoryName }]} />
                 
                 <div className="lg:grid lg:grid-cols-4 lg:gap-8 mt-4">
                     <aside className="hidden lg:block">
@@ -81,7 +91,7 @@ export const ShopPage: React.FC<ShopPageProps> = ({ onProductSelect, addToCart, 
                                 <button 
                                     key={category.id} 
                                     onClick={() => setSelectedCategory(category.id)}
-                                    className={`px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-full transition-colors duration-200 ${
+                                    className={`px-3 py-1.5 text-sm sm:text-base font-semibold rounded-full transition-colors duration-200 ${
                                         selectedCategory === category.id 
                                         ? 'bg-brand-green text-white shadow-md' 
                                         : 'bg-white text-gray-700 hover:bg-green-50 border'
@@ -92,7 +102,7 @@ export const ShopPage: React.FC<ShopPageProps> = ({ onProductSelect, addToCart, 
                             ))}
                         </div>
 
-                        <ProductsGrid products={filteredProducts} onProductSelect={onProductSelect} addToCart={addToCart} buyNow={buyNow} wishlist={wishlist} toggleWishlist={toggleWishlist} />
+                        <ProductsGrid products={filteredProducts} onProductSelect={onProductSelect} addToCart={addToCart} buyNow={buyNow} wishlist={wishlist} toggleWishlist={toggleWishlist} onQuickView={onQuickView} />
 
                         {/* Pagination */}
                         <div className="mt-8 flex justify-center items-center space-x-2">
