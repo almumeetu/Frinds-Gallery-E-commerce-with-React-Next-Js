@@ -58,10 +58,10 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ title, product
 
   return (
     <section className="w-full">
-      <div className="flex justify-between items-center mb-6 px-4 sm:px-6 lg:px-8">
-        <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">{title}</h2>
+      <div className="flex justify-between items-center mb-4 sm:mb-6 px-3 sm:px-6 lg:px-8">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">{title}</h2>
         {viewAllLink && (
-            <button onClick={viewAllLink} className="text-sm font-semibold text-brand-green hover:underline">
+            <button onClick={viewAllLink} className="text-xs sm:text-sm font-semibold text-brand-green hover:underline whitespace-nowrap">
                 সব দেখুন
             </button>
         )}
@@ -69,11 +69,11 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ title, product
        <div className="relative">
         <div
           ref={scrollContainerRef}
-          className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth space-x-8 px-4 sm:px-6 lg:px-8 py-4"
+          className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth space-x-4 sm:space-x-8 px-3 sm:px-6 lg:px-8 py-3 sm:py-4"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {products.map((product) => (
-            <div key={product.id} className="snap-start flex-shrink-0 w-48 sm:w-56 py-4">
+            <div key={product.id} className="snap-start flex-shrink-0 w-64 sm:w-72 lg:w-80 py-4">
               <MobileProductCard 
                   product={product} 
                   onProductSelect={onProductSelect} 

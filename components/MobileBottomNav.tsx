@@ -16,20 +16,20 @@ const navItems = [
 
 export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ currentPage, navigateTo }) => {
   return (
-    <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-[0_-1px_4px_rgba(0,0,0,0.06)] z-40">
-      <div className="flex justify-around items-center h-16">
+    <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-[0_-1px_4px_rgba(0,0,0,0.06)] z-40 safe-area-inset-bottom">
+      <div className="flex justify-around items-center h-14 sm:h-16 px-2">
         {navItems.map((item) => {
           const isActive = currentPage === item.page;
           return (
             <button
               key={item.page}
               onClick={() => navigateTo(item.page)}
-              className={`flex flex-col items-center justify-center space-y-1 w-full transition-colors duration-200 ${
+              className={`flex flex-col items-center justify-center space-y-0.5 sm:space-y-1 w-full transition-colors duration-200 ${
                 isActive ? 'text-brand-green' : 'text-slate-500 hover:text-brand-green'
               }`}
             >
-              {React.cloneElement(item.icon, { isFilled: isActive && item.page === 'wishlist' })}
-              <span className={`text-xs font-medium ${isActive ? 'font-bold' : ''}`}>
+              {React.cloneElement(item.icon, { isFilled: isActive && item.page === 'wishlist', className: 'h-5 w-5 sm:h-6 sm:w-6' })}
+              <span className={`text-[10px] sm:text-xs font-medium ${isActive ? 'font-bold' : ''}`}>
                 {item.label}
               </span>
             </button>

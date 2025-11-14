@@ -15,7 +15,7 @@ interface HeaderProps {
 }
 
 const Logo = () => (
-    <div className="text-brand-green font-bold text-2xl tracking-tight">
+    <div className="text-brand-green font-bold text-lg sm:text-xl md:text-2xl tracking-tight whitespace-nowrap">
       Friend's Gallery
     </div>
 );
@@ -49,8 +49,8 @@ export const Header: React.FC<HeaderProps> = ({ navigateTo, navigateToShop, cart
     
     return (
         <header className="bg-white/90 sticky top-0 z-40 shadow-sm backdrop-blur-lg">
-            <div className="w-full mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between h-20">
+            <div className="w-full mx-auto max-w-8xl px-3 sm:px-6 lg:px-8">
+                <div className="flex items-center justify-between h-16 sm:h-20">
                     <div className="flex items-center">
                         <button onClick={() => setIsMenuOpen(true)} className="lg:hidden p-2 -ml-2 text-slate-600 hover:text-brand-green" aria-label="Open menu">
                             <Bars3Icon />
@@ -80,19 +80,19 @@ export const Header: React.FC<HeaderProps> = ({ navigateTo, navigateToShop, cart
                         <button onClick={() => handleNavClick('contact')} className="hover:text-brand-green transition-colors">যোগাযোগ</button>
                      </nav>
 
-                    <div className="flex items-center space-x-2 sm:space-x-4">
-                         <button onClick={() => handleNavClick('wishlist')} className="relative p-2 text-slate-600 hover:text-brand-green">
-                           <HeartIcon />
-                           {wishlistItemCount > 0 && <span className="absolute top-1 right-1 block h-4 w-4 rounded-full bg-brand-accent text-white text-[10px] font-bold flex items-center justify-center">{wishlistItemCount}</span>}
+                    <div className="flex items-center space-x-1 sm:space-x-4">
+                         <button onClick={() => handleNavClick('wishlist')} className="relative p-1.5 sm:p-2 text-slate-600 hover:text-brand-green">
+                           <HeartIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+                           {wishlistItemCount > 0 && <span className="absolute top-0.5 right-0.5 sm:top-1 sm:right-1 block h-4 w-4 rounded-full bg-brand-accent text-white text-[10px] font-bold flex items-center justify-center">{wishlistItemCount}</span>}
                         </button>
-                         <button onClick={() => handleNavClick('checkout')} className="relative p-2 text-slate-600 hover:text-brand-green">
-                            <ShoppingCartIcon />
-                           {cartItemCount > 0 && <span className="absolute top-1 right-1 block h-4 w-4 rounded-full bg-brand-accent text-white text-[10px] font-bold flex items-center justify-center">{cartItemCount}</span>}
+                         <button onClick={() => handleNavClick('checkout')} className="relative p-1.5 sm:p-2 text-slate-600 hover:text-brand-green">
+                            <ShoppingCartIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+                           {cartItemCount > 0 && <span className="absolute top-0.5 right-0.5 sm:top-1 sm:right-1 block h-4 w-4 rounded-full bg-brand-accent text-white text-[10px] font-bold flex items-center justify-center">{cartItemCount}</span>}
                         </button>
                          <div className="hidden sm:block h-6 w-px bg-slate-200"></div>
                          <div className="relative group">
-                            <button onClick={() => navigateTo('account')} className="p-2 text-slate-600 hover:text-brand-green">
-                                <UserCircleIcon className="h-7 w-7" />
+                            <button onClick={() => navigateTo('account')} className="p-1.5 sm:p-2 text-slate-600 hover:text-brand-green">
+                                <UserCircleIcon className="h-6 w-6 sm:h-7 sm:w-7" />
                             </button>
                             <div className="absolute right-0 mt-2 w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-2 px-4 text-sm z-50">
                                {currentUser ? (

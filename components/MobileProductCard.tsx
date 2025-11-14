@@ -92,24 +92,40 @@ export const MobileProductCard: React.FC<MobileProductCardProps> = ({ product, o
             </div>
         </div>
         
-        <div className="flex justify-between items-center mt-3">
-          <div>
+        <div className="mt-3">
+          <div className="mb-3">
             <span className="text-xl font-bold text-brand-green">৳{product.price.toLocaleString('bn-BD')}</span>
             {product.originalPrice && (
                 <span className="text-sm text-slate-400 line-through ml-2">৳{product.originalPrice.toLocaleString('bn-BD')}</span>
             )}
           </div>
-          <button
+          
+          <div className="flex flex-col gap-2">
+            <button
               onClick={(e) => {
                   e.stopPropagation();
                   addToCart(product.id, 1);
               }}
               disabled={product.stock === 0}
-              className="p-2 bg-slate-100 text-brand-green rounded-full hover:bg-brand-green hover:text-white transition-colors disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-slate-100 text-brand-dark rounded-lg hover:bg-brand-dark hover:text-white transition-colors disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed font-semibold text-xs sm:text-sm"
               aria-label="Add to cart"
-          >
-              <ShoppingCartIcon className="h-5 w-5" />
-          </button>
+            >
+              <ShoppingCartIcon className="h-4 w-4 flex-shrink-0" />
+              <span>কার্টে যোগ করুন</span>
+            </button>
+            
+            <button
+              onClick={(e) => {
+                  e.stopPropagation();
+                  buyNow(product.id, 1);
+              }}
+              disabled={product.stock === 0}
+              className="w-full flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-brand-green text-white rounded-lg hover:bg-brand-dark transition-colors disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed font-semibold text-xs sm:text-sm"
+              aria-label="Buy now"
+            >
+              <span>এখনই কিনুন</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
