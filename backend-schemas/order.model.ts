@@ -1,4 +1,34 @@
-/*
+/**
+ * ============================================================
+ *                      BACKEND SCHEMA
+ * ============================================================
+ * This file defines the Mongoose schema for the 'Order' collection.
+ * It should be implemented in your Node.js/Express backend application.
+ *
+ * Fields:
+ * - ব্যবহারকারী (user): ObjectId, ref 'User', required. Links to the customer who placed the order.
+ * - অর্ডারআইডি (orderId): String, required, unique. A user-friendly order identifier (e.g., FG-2024-12345).
+ * - পণ্যসমূহ (items): Array of ordered items.
+ *   - পণ্য (product): ObjectId, ref 'Product', required.
+ *   - পরিমাণ (quantity): Number, required.
+ *   - মূল্য (price): Number, required. Price of the product at the time of purchase.
+ * - মোটমূল্য (totalAmount): Number, required. The subtotal for all items.
+ * - ডেলিভারিচার্জ (deliveryCharge): Number, required.
+ * - শিপিংঠিকানা (shippingAddress): Object containing the full delivery address.
+ * - স্ট্যাটাস (status): String, enum. Current status of the order.
+ * - পেমেন্টপদ্ধতি (paymentMethod): String, enum.
+ * - পেমেন্টস্ট্যাটাস (paymentStatus): String, enum.
+ * - অর্ডারেরতারিখ (orderDate): Date, defaults to current date.
+ *
+ * Example Usage in Backend:
+ * import mongoose from 'mongoose';
+ * const { Schema, model, Types } = mongoose;
+ * 
+ * // (Paste the schema definition here)
+ *
+ * export const OrderModel = model<IOrder>('Order', OrderSchema);
+ * ============================================================
+ */
 import { Schema, model, Document, Types } from 'mongoose';
 
 interface IOrder extends Document {
@@ -49,4 +79,3 @@ const OrderSchema = new Schema<IOrder>({
 
 // The model will be created in your Node.js backend like this:
 // export const OrderModel = model<IOrder>('Order', OrderSchema);
-*/

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { HomePage } from './pages/HomePage';
@@ -20,15 +21,17 @@ import { ReturnsPage } from './pages/ReturnsPage';
 import { TermsPage } from './pages/TermsPage';
 import { QuickViewModal } from './components/QuickViewModal';
 import type { Product, CartItem, OrderDetails, Order, Customer, OrderItem } from './types';
-import { mockProducts as initialProducts, mockOrders as initialOrders, mockCustomers as initialCustomers } from './constants';
+import * as api from './services/api';
 
 
 export type Page = 'home' | 'shop' | 'productDetail' | 'checkout' | 'orderSuccess' | 'wishlist' | 'admin' | 'utility' | 'hotDeals' | 'about' | 'contact' | 'account' | 'returns' | 'terms';
 
 const App: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>(initialProducts);
-  const [orders, setOrders] = useState<Order[]>(initialOrders);
-  const [customers, setCustomers] = useState<Customer[]>(initialCustomers);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   const [currentPage, setCurrentPage] = useState<Page>('home');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
@@ -37,6 +40,28 @@ const App: React.FC = () => {
   const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
   const [initialCategory, setInitialCategory] = useState<string>('all');
   const [currentUser, setCurrentUser] = useState<Customer | null>(null);
+
+  useEffect(() => {
+    const loadInitialData = async () => {
+        try {
+            setIsLoading(true);
+            const [productsData, ordersData, customersData] = await Promise.all([
+                api.getProducts(),
+                api.getOrders(),
+                api.getCustomers(),
+            ]);
+            setProducts(productsData);
+            setOrders(ordersData);
+            setCustomers(customersData);
+        } catch (error) {
+            console.error("Failed to load initial data", error);
+            // Optionally set an error state to show a message to the user
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    loadInitialData();
+  }, []);
 
   const navigateTo = (page: Page) => {
     setCurrentPage(page);
@@ -95,19 +120,8 @@ const App: React.FC = () => {
     setCart([]);
   }
 
-  const handlePlaceOrder = (orderData: { customerName: string; totalAmount: number; shippingAddress: string; items: OrderItem[] }) => {
-    const newOrderId = `FG-2024-${Math.floor(10000 + Math.random() * 90000)}`;
-    const newOrder: Order = {
-        id: `order_${Date.now()}`,
-        orderId: newOrderId,
-        customerName: orderData.customerName,
-        date: new Date().toISOString(),
-        totalAmount: orderData.totalAmount,
-        status: 'প্রক্রিয়াধীন',
-        items: orderData.items,
-        shippingAddress: orderData.shippingAddress,
-        customerId: currentUser?.id,
-    };
+  const handlePlaceOrder = async (orderData: { customerName: string; totalAmount: number; shippingAddress: string; items: OrderItem[] }) => {
+    const newOrder = await api.createOrder(orderData, currentUser);
     
     setOrders(prev => [newOrder, ...prev]);
 
@@ -123,7 +137,7 @@ const App: React.FC = () => {
     }
 
     setOrderDetails({
-        orderId: newOrderId,
+        orderId: newOrder.orderId,
         customerName: orderData.customerName,
         totalAmount: orderData.totalAmount,
     });
@@ -145,8 +159,8 @@ const App: React.FC = () => {
   };
 
   // Auth Handlers
-  const handleLogin = (email: string, password: string): boolean => {
-    const customer = customers.find(c => c.email.toLowerCase() === email.toLowerCase() && c.password === password);
+  const handleLogin = async (email: string, password: string): Promise<boolean> => {
+    const customer = await api.login(email, password);
     if (customer) {
       setCurrentUser(customer);
       navigateTo('account');
@@ -155,18 +169,12 @@ const App: React.FC = () => {
     return false;
   };
 
-  const handleRegister = (newCustomerData: Omit<Customer, 'id' | 'totalOrders' | 'totalSpent' | 'joinDate' | 'orderIds'>): boolean => {
-    if (customers.some(c => c.email.toLowerCase() === newCustomerData.email.toLowerCase())) {
+  const handleRegister = async (newCustomerData: Omit<Customer, 'id' | 'totalOrders' | 'totalSpent' | 'joinDate' | 'orderIds'>): Promise<boolean> => {
+    const existingCustomer = customers.some(c => c.email.toLowerCase() === newCustomerData.email.toLowerCase());
+    if (existingCustomer) {
       return false; // Email already exists
     }
-    const newCustomer: Customer = {
-      ...newCustomerData,
-      id: `cust_${Date.now()}`,
-      totalOrders: 0,
-      totalSpent: 0,
-      joinDate: new Date().toISOString(),
-      orderIds: [],
-    };
+    const newCustomer = await api.register(newCustomerData);
     setCustomers(prev => [...prev, newCustomer]);
     setCurrentUser(newCustomer);
     navigateTo('account');
@@ -180,32 +188,28 @@ const App: React.FC = () => {
 
 
   // Admin Handlers
-  const handleAddProduct = (newProduct: Omit<Product, 'id' | 'rating' | 'reviewCount'>) => {
-    setProducts(prevProducts => [
-      {
-        ...newProduct,
-        id: `prod_${Date.now()}`,
-        rating: 0,
-        reviewCount: 0,
-      },
-      ...prevProducts,
-    ]);
+  const handleAddProduct = async (newProductData: Omit<Product, 'id' | 'rating' | 'reviewCount'>) => {
+    const newProduct = await api.addProduct(newProductData);
+    setProducts(prevProducts => [newProduct, ...prevProducts]);
   };
 
-  const handleUpdateProduct = (updatedProduct: Product) => {
+  const handleUpdateProduct = async (updatedProduct: Product) => {
+    const result = await api.updateProduct(updatedProduct);
     setProducts(prevProducts =>
-      prevProducts.map(p => (p.id === updatedProduct.id ? updatedProduct : p))
+      prevProducts.map(p => (p.id === result.id ? result : p))
     );
   };
 
-  const handleDeleteProduct = (productId: string) => {
+  const handleDeleteProduct = async (productId: string) => {
+    await api.deleteProduct(productId);
     setProducts(prevProducts => prevProducts.filter(p => p.id !== productId));
   };
   
-  const handleUpdateOrderStatus = (orderId: string, status: Order['status']) => {
+  const handleUpdateOrderStatus = async (orderId: string, status: Order['status']) => {
+    const updatedOrder = await api.updateOrderStatus(orderId, status);
     setOrders(prevOrders =>
         prevOrders.map(order =>
-            order.id === orderId ? { ...order, status } : order
+            order.id === orderId ? updatedOrder : order
         )
     );
   };
@@ -230,6 +234,7 @@ const App: React.FC = () => {
                   orders={orders}
                   customers={customers}
                   onAddProduct={handleAddProduct}
+                  // FIX: Corrected typo from onUpdateProduct to handleUpdateProduct
                   onUpdateProduct={handleUpdateProduct}
                   onDeleteProduct={handleDeleteProduct}
                   onUpdateOrderStatus={handleUpdateOrderStatus}
@@ -255,9 +260,23 @@ const App: React.FC = () => {
         return <HomePage products={products} navigateTo={navigateTo} navigateToShop={navigateToShop} onProductSelect={handleProductSelect} wishlist={wishlist} toggleWishlist={toggleWishlist} addToCart={addToCart} buyNow={buyNow} onQuickView={handleQuickView} />;
     }
   };
+  
+    if (isLoading) {
+        return (
+            <div className="min-h-screen bg-brand-cream flex items-center justify-center">
+                <div className="flex flex-col items-center">
+                    <svg className="animate-spin h-10 w-10 text-brand-green" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <p className="mt-4 text-lg text-slate-600">লোড হচ্ছে...</p>
+                </div>
+            </div>
+        );
+    }
 
   return (
-    <div className="min-h-screen bg-white text-gray-800 flex flex-col">
+    <div className="min-h-screen bg-brand-cream text-brand-dark flex flex-col">
       <Header navigateTo={navigateTo} navigateToShop={navigateToShop} cartItemCount={cart.reduce((sum, item) => sum + item.quantity, 0)} wishlistItemCount={wishlist.length} currentUser={currentUser} onLogout={handleLogout} />
       <main className="flex-grow w-full">
         {renderPage()}

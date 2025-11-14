@@ -37,13 +37,13 @@ export const OrderTrackingWidget: React.FC = () => {
                     value={trackingId}
                     onChange={(e) => setTrackingId(e.target.value)}
                     placeholder="অর্ডার আইডি লিখুন (e.g., FG-2024-12345)"
-                    className="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-brand-green focus:border-brand-green"
+                    className="w-full sm:w-80"
                     aria-label="Order Tracking ID"
                 />
                 <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full sm:w-auto bg-brand-green text-white py-2 px-6 rounded-md font-semibold hover:bg-brand-green-dark disabled:bg-gray-400 transition-colors"
+                    className="w-full sm:w-auto bg-brand-green text-white py-2.5 px-6 rounded-lg font-semibold hover:bg-brand-green-dark disabled:bg-gray-400 transition-colors"
                 >
                     {isLoading ? 'অনুসন্ধান...' : 'ট্র্যাক করুন'}
                 </button>

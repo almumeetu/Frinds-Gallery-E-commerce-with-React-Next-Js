@@ -77,45 +77,45 @@ export const ProductForm: React.FC<ProductFormProps> = ({ product, onClose, onAd
             
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">পণ্যের নাম</label>
-                    <input type="text" name="name" id="name" value={formData.name} onChange={handleChange} required className="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">পণ্যের নাম</label>
+                    <input type="text" name="name" id="name" value={formData.name} onChange={handleChange} required />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label htmlFor="price" className="block text-sm font-medium text-gray-700">বিক্রয় মূল্য (৳)</label>
-                        <input type="number" name="price" id="price" value={formData.price} onChange={handleChange} required className="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
+                        <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">বিক্রয় মূল্য (৳)</label>
+                        <input type="number" name="price" id="price" value={formData.price} onChange={handleChange} required />
                     </div>
                     <div>
-                        <label htmlFor="originalPrice" className="block text-sm font-medium text-gray-700">আসল মূল্য (৳) (ঐচ্ছিক)</label>
-                        <input type="number" name="originalPrice" id="originalPrice" value={formData.originalPrice || ''} onChange={handleChange} className="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
+                        <label htmlFor="originalPrice" className="block text-sm font-medium text-gray-700 mb-1">আসল মূল্য (৳) (ঐচ্ছিক)</label>
+                        <input type="number" name="originalPrice" id="originalPrice" value={formData.originalPrice || ''} onChange={handleChange} />
                     </div>
                 </div>
                 <div>
-                    <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700">ছবির URL</label>
-                    <input type="text" name="imageUrl" id="imageUrl" value={formData.imageUrl} onChange={handleChange} required className="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
+                    <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700 mb-1">ছবির URL</label>
+                    <input type="text" name="imageUrl" id="imageUrl" value={formData.imageUrl} onChange={handleChange} required />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                        <label htmlFor="category" className="block text-sm font-medium text-gray-700">ক্যাটাগরি</label>
-                        <select name="category" id="category" value={formData.category} onChange={handleChange} required className="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">ক্যাটাগরি</label>
+                        <select name="category" id="category" value={formData.category} onChange={handleChange} required>
                             {categories.filter(c => c.id !== 'all').map(cat => (
                                 <option key={cat.id} value={cat.id}>{cat.name}</option>
                             ))}
                         </select>
                     </div>
                     <div>
-                        <label htmlFor="sku" className="block text-sm font-medium text-gray-700">SKU</label>
-                        <input type="text" name="sku" id="sku" value={formData.sku} onChange={handleChange} required className="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
+                        <label htmlFor="sku" className="block text-sm font-medium text-gray-700 mb-1">SKU</label>
+                        <input type="text" name="sku" id="sku" value={formData.sku} onChange={handleChange} required />
                     </div>
                     <div>
-                        <label htmlFor="stock" className="block text-sm font-medium text-gray-700">স্টক পরিমাণ</label>
-                        <input type="number" name="stock" id="stock" value={formData.stock} onChange={handleChange} required className="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
+                        <label htmlFor="stock" className="block text-sm font-medium text-gray-700 mb-1">স্টক পরিমাণ</label>
+                        <input type="number" name="stock" id="stock" value={formData.stock} onChange={handleChange} required />
                     </div>
                 </div>
 
                 <div className="pt-4 flex justify-end space-x-3 border-t mt-6">
-                    <button type="button" onClick={onClose} className="bg-gray-200 text-gray-700 py-2 px-4 rounded-md font-semibold hover:bg-gray-300">বাতিল</button>
-                    <button type="submit" className="bg-brand-green text-white py-2 px-4 rounded-md font-semibold hover:bg-brand-green-dark">
+                    <button type="button" onClick={onClose} className="bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300">বাতিল</button>
+                    <button type="submit" className="bg-brand-green text-white py-2 px-4 rounded-lg font-semibold hover:bg-brand-green-dark">
                         {product ? 'আপডেট করুন' : 'পণ্য যোগ করুন'}
                     </button>
                 </div>

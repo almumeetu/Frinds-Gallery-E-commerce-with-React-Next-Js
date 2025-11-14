@@ -49,7 +49,6 @@ export const SidebarFilters: React.FC<SidebarFiltersProps> = ({ priceRange, setP
               value="all"
               checked={availability === 'all'}
               onChange={(e) => setAvailability(e.target.value)}
-              className="h-4 w-4 text-brand-green border-gray-300 focus:ring-brand-green" 
             />
             <span className="ml-2 text-gray-700">সব</span>
           </label>
@@ -60,7 +59,6 @@ export const SidebarFilters: React.FC<SidebarFiltersProps> = ({ priceRange, setP
               value="inStock"
               checked={availability === 'inStock'}
               onChange={(e) => setAvailability(e.target.value)}
-              className="h-4 w-4 text-brand-green border-gray-300 focus:ring-brand-green" 
             />
             <span className="ml-2 text-gray-700">স্টকে আছে</span>
           </label>
@@ -71,7 +69,6 @@ export const SidebarFilters: React.FC<SidebarFiltersProps> = ({ priceRange, setP
               value="outOfStock" 
               checked={availability === 'outOfStock'}
               onChange={(e) => setAvailability(e.target.value)}
-              className="h-4 w-4 text-brand-green border-gray-300 focus:ring-brand-green" 
             />
             <span className="ml-2 text-gray-700">স্টকের বাইরে</span>
           </label>
@@ -87,7 +84,7 @@ export const SidebarFilters: React.FC<SidebarFiltersProps> = ({ priceRange, setP
             value={priceRange.min}
             onChange={handlePriceChange}
             placeholder="Min" 
-            className="w-full px-2 py-1 text-center border-gray-300 rounded-md shadow-sm"
+            className="w-full px-2 py-1 text-center"
           />
           <span>-</span>
           <input 
@@ -96,7 +93,7 @@ export const SidebarFilters: React.FC<SidebarFiltersProps> = ({ priceRange, setP
             value={priceRange.max}
             onChange={handlePriceChange}
             placeholder="Max" 
-            className="w-full px-2 py-1 text-center border-gray-300 rounded-md shadow-sm"
+            className="w-full px-2 py-1 text-center"
           />
           <button onClick={() => setPriceRange({ min: 0, max: 10000 })} className="text-xs text-gray-600 hover:text-brand-green">রিসেট</button>
         </div>

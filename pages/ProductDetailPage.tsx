@@ -5,6 +5,7 @@ import { ProductCarousel } from '../components/ProductCarousel';
 import { categories, mockProductReviews } from '../constants';
 import type { Page } from '../App';
 import { ProductReviews } from '../components/ProductReviews';
+import { HeartIcon, PlusIcon, MinusIcon } from '../components/icons';
 
 interface ProductDetailPageProps {
   product: Product;
@@ -97,26 +98,50 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product, a
             </div>
 
             <div className="mt-6 flex items-center space-x-4">
-                <div className="flex items-center border border-gray-300 rounded-md">
-                    <button onClick={() => setQuantity(q => Math.max(1, q - 1))} className="px-3 py-2 text-gray-600">-</button>
-                    <input type="text" value={quantity} readOnly className="w-12 text-center border-l border-r"/>
-                    <button onClick={() => setQuantity(q => q + 1)} className="px-3 py-2 text-gray-600">+</button>
+                <div className="flex items-center">
+                  <label htmlFor="quantity-pd" className="sr-only">পরিমাণ</label>
+                  <div className="flex items-center border border-slate-300 rounded-lg overflow-hidden h-12">
+                    <button
+                      type="button"
+                      onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                      disabled={quantity <= 1}
+                      className="px-4 h-full text-slate-600 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      aria-label="Decrease quantity"
+                    >
+                      <MinusIcon className="h-4 w-4" />
+                    </button>
+                    <input
+                      id="quantity-pd"
+                      type="number"
+                      value={quantity}
+                      readOnly
+                      className="w-16 h-full text-center text-lg font-semibold text-brand-dark border-l border-r border-slate-300 focus:outline-none bg-white"
+                      aria-live="polite"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setQuantity(q => Math.min(product.stock, q + 1))}
+                      disabled={quantity >= product.stock}
+                      className="px-4 h-full text-slate-600 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      aria-label="Increase quantity"
+                    >
+                      <PlusIcon className="h-4 w-4" />
+                    </button>
+                  </div>
                 </div>
                 <button
                     onClick={() => addToCart(product.id, quantity)}
                     disabled={product.stock === 0}
-                    className="flex-1 bg-brand-yellow text-gray-900 py-3 px-8 border border-transparent rounded-md font-bold hover:bg-yellow-400 disabled:bg-gray-300"
+                    className="flex-1 bg-brand-yellow text-gray-900 py-3 px-8 border border-transparent rounded-md font-bold hover:bg-yellow-400 disabled:bg-gray-300 h-12 flex items-center justify-center"
                     >
                     কার্টে যোগ করুন
                 </button>
                  <button
                     onClick={() => toggleWishlist(product.id)}
-                    className="p-3 border border-gray-300 rounded-md hover:bg-gray-100"
+                    className="p-3 border border-gray-300 rounded-md hover:bg-gray-100 h-12 w-12 flex items-center justify-center"
                     aria-label="Add to wishlist"
                 >
-                    <svg className={`w-6 h-6 ${isInWishlist ? 'text-red-500 fill-current' : 'text-gray-500 stroke-current'}`} fill="none" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 016.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z"></path>
-                    </svg>
+                    <HeartIcon className={`w-6 h-6 ${isInWishlist ? 'text-red-500' : 'text-gray-500'}`} isFilled={isInWishlist}/>
                 </button>
             </div>
              <button

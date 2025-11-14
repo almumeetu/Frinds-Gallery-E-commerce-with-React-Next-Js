@@ -113,22 +113,22 @@ export const ProductReviews: React.FC<ProductReviewsProps> = ({ productId, revie
               <h3 className="text-xl font-semibold mb-4 text-gray-800">আপনার মতামত দিন</h3>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label htmlFor="author" className="block text-sm font-medium text-gray-700">আপনার নাম *</label>
-                  <input type="text" id="author" value={author} onChange={(e) => setAuthor(e.target.value)} required className="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
+                  <label htmlFor="author" className="block text-sm font-medium text-gray-700 mb-1">আপনার নাম *</label>
+                  <input type="text" id="author" value={author} onChange={(e) => setAuthor(e.target.value)} required />
                 </div>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">আপনার ইমেইল *</label>
-                  <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">আপনার ইমেইল *</label>
+                  <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700">আপনার রেটিং *</label>
                   <StarRatingInput rating={rating} setRating={setRating} />
                 </div>
                 <div>
-                  <label htmlFor="comment" className="block text-sm font-medium text-gray-700">আপনার মন্তব্য *</label>
-                  <textarea id="comment" value={comment} onChange={(e) => setComment(e.target.value)} required rows={4} className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
+                  <label htmlFor="comment" className="block text-sm font-medium text-gray-700 mb-1">আপনার মন্তব্য *</label>
+                  <textarea id="comment" value={comment} onChange={(e) => setComment(e.target.value)} required rows={4}></textarea>
                 </div>
-                <button type="submit" className="w-full bg-brand-green text-white py-2.5 rounded-md font-semibold hover:bg-brand-green-dark transition-colors">
+                <button type="submit" className="w-full bg-brand-green text-white py-2.5 rounded-lg font-semibold hover:bg-brand-green-dark transition-colors">
                   মতামত জমা দিন
                 </button>
               </form>

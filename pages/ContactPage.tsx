@@ -1,6 +1,7 @@
 import React from 'react';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import type { Page } from '../App';
+import { DevicePhoneMobileIcon, EnvelopeIcon, MapPinIcon } from '../components/icons';
 
 interface ContactPageProps {
     navigateTo: (page: Page) => void;
@@ -20,21 +21,21 @@ export const ContactPage: React.FC<ContactPageProps> = ({ navigateTo }) => {
                         <div className="space-y-6">
                             <h2 className="text-xl font-semibold text-gray-800">আমাদের তথ্য</h2>
                             <div className="flex items-start space-x-4">
-                                <span className="text-2xl mt-1">📞</span>
+                                <span className="text-2xl mt-1 text-brand-green"><DevicePhoneMobileIcon className="w-6 h-6" /></span>
                                 <div>
                                     <h3 className="font-semibold">ফোন</h3>
                                     <a href="tel:01618803154" className="text-brand-green hover:underline">01618803154</a>
                                 </div>
                             </div>
                             <div className="flex items-start space-x-4">
-                                <span className="text-2xl mt-1">✉️</span>
+                                <span className="text-2xl mt-1 text-brand-green"><EnvelopeIcon className="w-6 h-6" /></span>
                                 <div>
                                     <h3 className="font-semibold">ইমেইল</h3>
                                     <a href="mailto:friendsgallery191@gmail.com" className="text-brand-green hover:underline">friendsgallery191@gmail.com</a>
                                 </div>
                             </div>
                             <div className="flex items-start space-x-4">
-                                <span className="text-2xl mt-1">📍</span>
+                                <span className="text-2xl mt-1 text-brand-green"><MapPinIcon className="w-6 h-6" /></span>
                                 <div>
                                     <h3 className="font-semibold">ঠিকানা</h3>
                                     <p>Zerabo Ashulia Saver Dhaka 1341</p>
@@ -47,18 +48,18 @@ export const ContactPage: React.FC<ContactPageProps> = ({ navigateTo }) => {
                             <h2 className="text-xl font-semibold text-gray-800 mb-4">বার্তা পাঠান</h2>
                             <form className="space-y-4">
                                 <div>
-                                    <label htmlFor="name" className="text-sm font-medium text-gray-700">নাম</label>
-                                    <input type="text" id="name" className="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
+                                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">নাম</label>
+                                    <input type="text" id="name" />
                                 </div>
                                 <div>
-                                    <label htmlFor="email" className="text-sm font-medium text-gray-700">ইমেইল</label>
-                                    <input type="email" id="email" className="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
+                                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">ইমেইল</label>
+                                    <input type="email" id="email" />
                                 </div>
                                 <div>
-                                    <label htmlFor="message" className="text-sm font-medium text-gray-700">বার্তা</label>
-                                    <textarea id="message" rows={4} className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
+                                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">বার্তা</label>
+                                    <textarea id="message" rows={4}></textarea>
                                 </div>
-                                <button type="submit" className="w-full bg-brand-green text-white py-2.5 rounded-md font-semibold hover:bg-brand-green-dark">পাঠিয়ে দিন</button>
+                                <button type="submit" className="w-full bg-brand-green text-white py-2.5 rounded-lg font-semibold hover:bg-brand-green-dark">পাঠিয়ে দিন</button>
                             </form>
                         </div>
                     </div>

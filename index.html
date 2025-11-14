@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Friend’s Gallery 0.7 | Your style, your choice</title>
+    <title>Friend’s Gallery | Your style, your choice</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,6 +11,7 @@
     <style>
       body {
         font-family: 'Hind Siliguri', sans-serif;
+        background-color: #FDFCF9;
       }
       @keyframes marquee {
         from { transform: translateX(0); }
@@ -26,17 +27,43 @@
       .group:hover .animate-marquee-fast {
         animation-play-state: paused;
       }
+      /* Global Form Styles */
+      input[type="text"],
+      input[type="email"],
+      input[type="password"],
+      input[type="tel"],
+      input[type="search"],
+      input[type="number"],
+      textarea,
+      select {
+        @apply block w-full px-4 py-2.5 text-base text-slate-700 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-green/50 focus:border-brand-green transition duration-150 ease-in-out;
+      }
+      input[type="radio"],
+      input[type="checkbox"] {
+          @apply h-4 w-4 text-brand-green border-slate-300 focus:ring-brand-green focus:ring-2;
+      }
+      select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 0.7rem center;
+        background-repeat: no-repeat;
+        background-size: 1.5em 1.5em;
+        padding-right: 2.5rem;
+      }
     </style>
     <script>
       tailwind.config = {
         theme: {
           extend: {
             colors: {
-              'brand-green': '#036653',
-              'brand-green-dark': '#024b3d',
-              'brand-yellow': '#FFC107',
-              'brand-dark': '#1a3a32',
-              'brand-dark-hover': '#234f45',
+              'brand-green': '#047857', // A slightly brighter, more modern green
+              'brand-green-dark': '#065f46',
+              'brand-cream': '#FDFCF9', // Soft background color
+              'brand-dark': '#1e293b', // Slate 800 for dark text/elements
+              'brand-dark-hover': '#334155', // Slate 700
+              'brand-accent': '#f59e0b', // A warm, friendly amber
             },
           },
         },
@@ -47,12 +74,13 @@
   "imports": {
     "react/": "https://aistudiocdn.com/react@^19.2.0/",
     "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/"
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "mongoose": "https://aistudiocdn.com/mongoose@^8.19.3"
   }
 }
 </script>
 </head>
-  <body class="bg-white">
+  <body class="bg-brand-cream">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>

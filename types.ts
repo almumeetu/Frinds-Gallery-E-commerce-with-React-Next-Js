@@ -73,7 +73,8 @@ export interface Order {
     customerName: string;
     date: string;
     totalAmount: number;
-    status: 'প্রক্রিয়াধীন' | 'শিপিং-এ' | 'পৌঁছে গেছে' | 'বাতিল';
+    // FIX: Changed status to use the OrderStatus enum for type safety.
+    status: OrderStatus;
     items: OrderItem[];
     shippingAddress: string;
     customerId?: string;

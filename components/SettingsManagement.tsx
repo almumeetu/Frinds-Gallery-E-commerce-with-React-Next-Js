@@ -43,20 +43,20 @@ export const SettingsManagement: React.FC = () => {
                     <h3 className="text-lg font-medium text-gray-900 mb-4">দোকানের তথ্য</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                          <div>
-                            <label htmlFor="storeName" className="block text-sm font-medium text-gray-700">দোকানের নাম</label>
-                            <input type="text" name="storeName" id="storeName" value={settings.storeName} onChange={handleChange} className="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
+                            <label htmlFor="storeName" className="block text-sm font-medium text-gray-700 mb-1">দোকানের নাম</label>
+                            <input type="text" name="storeName" id="storeName" value={settings.storeName} onChange={handleChange} />
                         </div>
                         <div>
-                            <label htmlFor="hotline" className="block text-sm font-medium text-gray-700">হটলাইন</label>
-                            <input type="text" name="hotline" id="hotline" value={settings.hotline} onChange={handleChange} className="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
+                            <label htmlFor="hotline" className="block text-sm font-medium text-gray-700 mb-1">হটলাইন</label>
+                            <input type="text" name="hotline" id="hotline" value={settings.hotline} onChange={handleChange} />
                         </div>
                         <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-700">ইমেইল</label>
-                            <input type="email" name="email" id="email" value={settings.email} onChange={handleChange} className="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
+                            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">ইমেইল</label>
+                            <input type="email" name="email" id="email" value={settings.email} onChange={handleChange} />
                         </div>
                         <div>
-                            <label htmlFor="address" className="block text-sm font-medium text-gray-700">ঠিকানা</label>
-                            <textarea name="address" id="address" value={settings.address} onChange={handleChange} rows={1} className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
+                            <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">ঠিকানা</label>
+                            <textarea name="address" id="address" value={settings.address} onChange={handleChange} rows={1}></textarea>
                         </div>
                     </div>
                 </div>
@@ -66,19 +66,19 @@ export const SettingsManagement: React.FC = () => {
                     <h3 className="text-lg font-medium text-gray-900 mb-4">ডেলিভারি সেটিংস</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                          <div>
-                            <label htmlFor="deliveryChargeDhaka" className="block text-sm font-medium text-gray-700">ঢাকার ভিতরে ডেলিভারি চার্জ (৳)</label>
-                            <input type="number" name="deliveryChargeDhaka" id="deliveryChargeDhaka" value={settings.deliveryChargeDhaka} onChange={handleChange} className="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
+                            <label htmlFor="deliveryChargeDhaka" className="block text-sm font-medium text-gray-700 mb-1">ঢাকার ভিতরে ডেলিভারি চার্জ (৳)</label>
+                            <input type="number" name="deliveryChargeDhaka" id="deliveryChargeDhaka" value={settings.deliveryChargeDhaka} onChange={handleChange} />
                         </div>
                         <div>
-                            <label htmlFor="deliveryChargeOutside" className="block text-sm font-medium text-gray-700">ঢাকার বাইরে ডেলিভারি চার্জ (৳)</label>
-                            <input type="number" name="deliveryChargeOutside" id="deliveryChargeOutside" value={settings.deliveryChargeOutside} onChange={handleChange} className="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
+                            <label htmlFor="deliveryChargeOutside" className="block text-sm font-medium text-gray-700 mb-1">ঢাকার বাইরে ডেলিভারি চার্জ (৳)</label>
+                            <input type="number" name="deliveryChargeOutside" id="deliveryChargeOutside" value={settings.deliveryChargeOutside} onChange={handleChange} />
                         </div>
                     </div>
                 </div>
                 
                 <div className="flex justify-end items-center space-x-4">
                     {isSaved && <p className="text-green-600 font-semibold">সফলভাবে সেভ হয়েছে!</p>}
-                    <button type="submit" className="bg-brand-green text-white py-2 px-6 rounded-md font-semibold hover:bg-brand-green-dark transition-colors">
+                    <button type="submit" className="bg-brand-green text-white py-2 px-6 rounded-lg font-semibold hover:bg-brand-green-dark transition-colors">
                         পরিবর্তন সেভ করুন
                     </button>
                 </div>

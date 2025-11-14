@@ -46,7 +46,7 @@ export const ShopPage: React.FC<ShopPageProps> = ({ products, initialCategory, o
     const currentCategoryName = categories.find(c => c.id === selectedCategory)?.name || 'সকল পণ্য';
 
     return (
-        <div className="bg-white">
+        <div className="bg-brand-cream">
             <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
                  <Breadcrumbs items={[{ label: 'হোম', onClick: () => navigateTo('home') }, { label: 'শপ', onClick: () => navigateToShop('all') }, { label: currentCategoryName }]} />
                 
@@ -64,9 +64,9 @@ export const ShopPage: React.FC<ShopPageProps> = ({ products, initialCategory, o
                     </aside>
 
                     <main className="lg:col-span-3">
-                        <div className="bg-gray-100 p-4 rounded-md mb-6">
+                        <div className="bg-white p-4 rounded-md mb-6 border border-slate-200">
                             <div className="flex justify-between items-center">
-                                <h1 className="text-2xl font-bold text-gray-900">
+                                <h1 className="text-2xl font-bold text-slate-900">
                                     {currentCategoryName}
                                 </h1>
                                 <div className="flex items-center space-x-2">
@@ -75,7 +75,7 @@ export const ShopPage: React.FC<ShopPageProps> = ({ products, initialCategory, o
                                         id="sort"
                                         value={sortOrder}
                                         onChange={(e) => setSortOrder(e.target.value)}
-                                        className="border-gray-300 rounded-md shadow-sm text-sm"
+                                        className="text-sm"
                                     >
                                         <option value="default">ডিফল্ট</option>
                                         <option value="price-asc">মূল্য: কম থেকে বেশি</option>
@@ -94,7 +94,7 @@ export const ShopPage: React.FC<ShopPageProps> = ({ products, initialCategory, o
                                     className={`px-3 py-1.5 text-sm sm:text-base font-semibold rounded-full transition-colors duration-200 ${
                                         selectedCategory === category.id 
                                         ? 'bg-brand-green text-white shadow-md' 
-                                        : 'bg-white text-gray-700 hover:bg-green-50 border'
+                                        : 'bg-white text-slate-700 hover:bg-green-50 border'
                                     }`}
                                 >
                                     {category.name}
@@ -106,11 +106,11 @@ export const ShopPage: React.FC<ShopPageProps> = ({ products, initialCategory, o
 
                         {/* Pagination */}
                         <div className="mt-8 flex justify-center items-center space-x-2">
-                           <button className="px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50" disabled>&laquo;</button>
+                           <button className="px-4 py-2 text-sm font-medium text-slate-500 bg-white border border-slate-300 rounded-md hover:bg-slate-50 disabled:opacity-50" disabled>&laquo;</button>
                            <button className="px-4 py-2 text-sm font-medium text-white bg-brand-green border border-brand-green rounded-md">1</button>
-                           <button className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">2</button>
-                           <button className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">3</button>
-                           <button className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">&raquo;</button>
+                           <button className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-md hover:bg-slate-50">2</button>
+                           <button className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-md hover:bg-slate-50">3</button>
+                           <button className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-md hover:bg-slate-50">&raquo;</button>
                         </div>
                     </main>
                 </div>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { Product } from '../types';
+import { HeartIcon, XMarkIcon, PlusIcon, MinusIcon } from './icons';
 
 interface QuickViewModalProps {
   product: Product;
@@ -22,7 +23,7 @@ export const QuickViewModal: React.FC<QuickViewModalProps> = ({ product, onClose
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4" onClick={onClose} role="dialog" aria-modal="true" aria-labelledby="quick-view-title">
       <div className="relative bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10" aria-label="Close modal">
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          <XMarkIcon />
         </button>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
           {/* Image */}
@@ -58,10 +59,36 @@ export const QuickViewModal: React.FC<QuickViewModalProps> = ({ product, onClose
             {/* Actions */}
             <div className="mt-6">
                  <div className="flex items-center space-x-4">
-                    <div className="flex items-center border border-gray-300 rounded-md">
-                        <button onClick={() => setQuantity(q => Math.max(1, q - 1))} className="px-3 py-2 text-gray-600 hover:bg-gray-100">-</button>
-                        <input type="text" value={quantity} readOnly className="w-12 text-center border-l border-r focus:outline-none"/>
-                        <button onClick={() => setQuantity(q => q + 1)} className="px-3 py-2 text-gray-600 hover:bg-gray-100">+</button>
+                    <div className="flex items-center">
+                        <label htmlFor="quantity-qv" className="sr-only">পরিমাণ</label>
+                        <div className="flex items-center border border-slate-300 rounded-lg overflow-hidden h-12">
+                            <button
+                            type="button"
+                            onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                            disabled={quantity <= 1}
+                            className="px-4 h-full text-slate-600 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            aria-label="Decrease quantity"
+                            >
+                            <MinusIcon className="h-4 w-4" />
+                            </button>
+                            <input
+                            id="quantity-qv"
+                            type="number"
+                            value={quantity}
+                            readOnly
+                            className="w-16 h-full text-center text-lg font-semibold text-brand-dark border-l border-r border-slate-300 focus:outline-none bg-white"
+                            aria-live="polite"
+                            />
+                            <button
+                            type="button"
+                            onClick={() => setQuantity(q => Math.min(product.stock, q + 1))}
+                            disabled={quantity >= product.stock}
+                            className="px-4 h-full text-slate-600 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            aria-label="Increase quantity"
+                            >
+                            <PlusIcon className="h-4 w-4" />
+                            </button>
+                        </div>
                     </div>
                     <button
                         onClick={() => {
@@ -69,18 +96,16 @@ export const QuickViewModal: React.FC<QuickViewModalProps> = ({ product, onClose
                             onClose();
                         }}
                         disabled={product.stock === 0}
-                        className="flex-1 bg-brand-yellow text-gray-900 py-3 px-6 border border-transparent rounded-md font-bold hover:bg-yellow-400 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                        className="flex-1 bg-brand-yellow text-gray-900 py-3 px-6 border border-transparent rounded-md font-bold hover:bg-yellow-400 disabled:bg-gray-300 disabled:cursor-not-allowed h-12 flex items-center justify-center"
                         >
                         কার্টে যোগ করুন
                     </button>
                     <button
                         onClick={() => toggleWishlist(product.id)}
-                        className="p-3 border rounded-md hover:bg-gray-100"
+                        className="p-3 border rounded-md hover:bg-gray-100 h-12 w-12 flex items-center justify-center"
                         aria-label="Add to wishlist"
                     >
-                        <svg className={`w-6 h-6 ${isInWishlist ? 'text-red-500 fill-current' : 'text-gray-500 stroke-current'}`} fill="none" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 016.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z"></path>
-                        </svg>
+                        <HeartIcon className={`w-6 h-6 ${isInWishlist ? 'text-red-500' : 'text-gray-500'}`} isFilled={isInWishlist} />
                     </button>
                 </div>
                 <button

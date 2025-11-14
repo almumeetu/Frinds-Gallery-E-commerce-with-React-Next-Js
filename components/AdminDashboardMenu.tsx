@@ -1,11 +1,12 @@
 import React from 'react';
+import { ChartBarIcon, CubeIcon, ShoppingBagIcon, UsersIcon, Cog6ToothIcon } from './icons';
 
 const menuItems = [
-    { id: 'dashboard', label: 'ড্যাশবোর্ড', icon: '📊' },
-    { id: 'orders', label: 'অর্ডারসমূহ', icon: '📦' },
-    { id: 'products', label: 'পণ্যসমূহ', icon: '🛍️' },
-    { id: 'customers', label: 'গ্রাহক তালিকা', icon: '👥' },
-    { id: 'settings', label: 'সেটিংস', icon: '⚙️' },
+    { id: 'dashboard', label: 'ড্যাশবোর্ড', icon: <ChartBarIcon /> },
+    { id: 'orders', label: 'অর্ডারসমূহ', icon: <CubeIcon /> },
+    { id: 'products', label: 'পণ্যসমূহ', icon: <ShoppingBagIcon /> },
+    { id: 'customers', label: 'গ্রাহক তালিকা', icon: <UsersIcon /> },
+    { id: 'settings', label: 'সেটিংস', icon: <Cog6ToothIcon /> },
 ];
 
 interface AdminDashboardMenuProps {
@@ -28,7 +29,7 @@ export const AdminDashboardMenu: React.FC<AdminDashboardMenuProps> = ({ activeVi
                                 : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                             }`}
                         >
-                           <span className="mr-3">{item.icon}</span>
+                           <span className="mr-3 w-5 h-5">{item.icon}</span>
                            {item.label}
                         </button>
                     </li>

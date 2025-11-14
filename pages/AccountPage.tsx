@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import type { Page } from '../App';
 import type { Customer, Order } from '../types';
+import { OrderStatus } from '../types';
+import { HomeIcon, CubeIcon, UserIcon, ArrowLeftOnRectangleIcon } from '../components/icons';
 
 interface AccountPageProps {
     navigateTo: (page: Page) => void;
@@ -10,20 +12,21 @@ interface AccountPageProps {
     onLogout: () => void;
 }
 
+// FIX: Updated switch cases to use OrderStatus enum members.
 const getStatusColor = (status: Order['status']) => {
     switch (status) {
-        case 'প্রক্রিয়াধীন': return 'bg-yellow-100 text-yellow-800';
-        case 'শিপিং-এ': return 'bg-blue-100 text-blue-800';
-        case 'পৌঁছে গেছে': return 'bg-green-100 text-green-800';
-        case 'বাতিল': return 'bg-red-100 text-red-800';
+        case OrderStatus.Processing: return 'bg-yellow-100 text-yellow-800';
+        case OrderStatus.Shipped: return 'bg-blue-100 text-blue-800';
+        case OrderStatus.Delivered: return 'bg-green-100 text-green-800';
+        case OrderStatus.Cancelled: return 'bg-red-100 text-red-800';
         default: return 'bg-gray-100 text-gray-800';
     }
 };
 
 const menuItems = [
-    { id: 'dashboard', label: 'ড্যাশবোর্ড', icon: '🏠' },
-    { id: 'orders', label: 'অর্ডারসমূহ', icon: '📦' },
-    { id: 'profile', label: 'প্রোফাইল', icon: '👤' },
+    { id: 'dashboard', label: 'ড্যাশবোর্ড', icon: <HomeIcon /> },
+    { id: 'orders', label: 'অর্ডারসমূহ', icon: <CubeIcon /> },
+    { id: 'profile', label: 'প্রোফাইল', icon: <UserIcon /> },
 ];
 
 export const AccountPage: React.FC<AccountPageProps> = ({ navigateTo, currentUser, orders, onLogout }) => {
@@ -120,7 +123,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({ navigateTo, currentUse
                                                 : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                                             }`}
                                         >
-                                           <span className="mr-3">{item.icon}</span>
+                                           <span className="mr-3 w-5 h-5">{item.icon}</span>
                                            {item.label}
                                         </button>
                                     </li>
@@ -130,7 +133,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({ navigateTo, currentUse
                                         onClick={onLogout}
                                         className="w-full flex items-center text-left px-3 py-2.5 rounded-md text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900"
                                     >
-                                       <span className="mr-3">🚪</span>
+                                       <span className="mr-3 w-5 h-5"><ArrowLeftOnRectangleIcon /></span>
                                        লগআউট
                                     </button>
                                 </li>

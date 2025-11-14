@@ -69,11 +69,11 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ title, product
        <div className="relative">
         <div
           ref={scrollContainerRef}
-          className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth space-x-4 pl-4 sm:pl-6 lg:pl-8 py-4"
+          className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth space-x-8 px-4 sm:px-6 lg:px-8 py-4"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {products.map((product) => (
-            <div key={product.id} className="snap-start flex-shrink-0 w-48 sm:w-56">
+            <div key={product.id} className="snap-start flex-shrink-0 w-48 sm:w-56 py-4">
               <MobileProductCard 
                   product={product} 
                   onProductSelect={onProductSelect} 

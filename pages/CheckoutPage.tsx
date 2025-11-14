@@ -77,7 +77,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ cart, products, upda
   };
 
   return (
-    <div className="bg-gray-50">
+    <div className="bg-brand-cream">
       <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
         <Breadcrumbs items={[{ label: 'হোম', onClick: () => navigateTo('home') }, { label: 'চেকআউট' }]} />
         <h1 className="text-3xl font-bold text-center my-6">অর্ডার টি সম্পন্ন করতে আপনার নাম, মোবাইল নাম্বার ও ঠিকানা নিচে লিখুন</h1>
@@ -88,27 +88,27 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ cart, products, upda
             <h2 className="text-2xl font-semibold mb-4">বিলিং ডিটেইল</h2>
             <div className="space-y-4">
               <div>
-                <label htmlFor="name" className="block text-base font-medium text-gray-700">আপনার নাম লিখুন *</label>
-                <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} required className="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
+                <label htmlFor="name" className="block text-base font-medium text-slate-700 mb-1">আপনার নাম লিখুন *</label>
+                <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} required />
               </div>
               <div>
-                <label htmlFor="phone" className="block text-base font-medium text-gray-700">আপনার মোবাইল নাম্বার লিখুন *</label>
-                <input type="tel" id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} required className="mt-1 block w-full border-gray-300 rounded-md shadow-sm" />
+                <label htmlFor="phone" className="block text-base font-medium text-slate-700 mb-1">আপনার মোবাইল নাম্বার লিখুন *</label>
+                <input type="tel" id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} required />
               </div>
                <div>
-                <label className="block text-base font-medium text-gray-700">এলাকা সিলেক্ট করুন *</label>
-                <div className="flex space-x-4 mt-1">
-                    <label className="flex items-center"><input type="radio" name="area" value="ঢাকা" checked={selectedDistrict === 'ঢাকা'} onChange={(e) => setSelectedDistrict(e.target.value)} className="text-brand-green"/> <span className="ml-2">ঢাকার ভিতরে</span></label>
-                    <label className="flex items-center"><input type="radio" name="area" value="অন্যান্য" checked={selectedDistrict !== 'ঢাকা'} onChange={() => setSelectedDistrict('চট্টগ্রাম')} className="text-brand-green"/> <span className="ml-2">ঢাকার বাইরে</span></label>
+                <label className="block text-base font-medium text-slate-700">এলাকা সিলেক্ট করুন *</label>
+                <div className="flex space-x-4 mt-2">
+                    <label className="flex items-center"><input type="radio" name="area" value="ঢাকা" checked={selectedDistrict === 'ঢাকা'} onChange={(e) => setSelectedDistrict(e.target.value)}/> <span className="ml-2">ঢাকার ভিতরে</span></label>
+                    <label className="flex items-center"><input type="radio" name="area" value="অন্যান্য" checked={selectedDistrict !== 'ঢাকা'} onChange={() => setSelectedDistrict('চট্টগ্রাম')}/> <span className="ml-2">ঢাকার বাইরে</span></label>
                 </div>
               </div>
               <div>
-                <label htmlFor="address" className="block text-base font-medium text-gray-700">সম্পূর্ণ ঠিকানা *</label>
-                <textarea id="address" value={address} onChange={(e) => setAddress(e.target.value)} required rows={3} className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
+                <label htmlFor="address" className="block text-base font-medium text-slate-700 mb-1">সম্পূর্ণ ঠিকানা *</label>
+                <textarea id="address" value={address} onChange={(e) => setAddress(e.target.value)} required rows={3}></textarea>
               </div>
                <div>
-                <label htmlFor="notes" className="block text-base font-medium text-gray-700">নোট (অপশনাল)</label>
-                <textarea id="notes" rows={2} className="mt-1 block w-full border-gray-300 rounded-md shadow-sm" placeholder="Test order for UI checking..."></textarea>
+                <label htmlFor="notes" className="block text-base font-medium text-slate-700 mb-1">নোট (অপশনাল)</label>
+                <textarea id="notes" rows={2} placeholder="Test order for UI checking..."></textarea>
               </div>
             </div>
           </div>
@@ -123,7 +123,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ cart, products, upda
                   <div className="flex-grow">
                     <p className="font-semibold text-base">{item.product!.name}</p>
                     <div className="flex items-center mt-1">
-                      <p className="text-sm text-gray-600">Qty:</p>
+                      <p className="text-sm text-slate-600">Qty:</p>
                       <div className="flex items-center border rounded ml-2">
                         <button type="button" onClick={() => updateCartQuantity(item.productId, item.quantity - 1)} className="px-2 text-lg">-</button>
                         <span className="px-2 text-sm">{item.quantity}</span>
@@ -147,14 +147,14 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ cart, products, upda
                  <div className="grid grid-cols-2 gap-2">
                     {paymentMethods.map(method => (
                         <label key={method.id} className={`flex items-center p-2 border rounded-md cursor-pointer ${paymentMethod === method.id ? 'border-brand-green bg-green-50' : ''}`}>
-                            <input type="radio" name="payment" value={method.id} checked={paymentMethod === method.id} onChange={(e) => setPaymentMethod(e.target.value)} className="h-4 w-4 text-brand-green border-gray-300"/>
+                            <input type="radio" name="payment" value={method.id} checked={paymentMethod === method.id} onChange={(e) => setPaymentMethod(e.target.value)}/>
                             <img src={method.icon} alt={method.name} className="h-6 ml-3" />
                         </label>
                     ))}
                  </div>
             </div>
             <div className="mt-6">
-                <button type="submit" disabled={isSubmitting || cart.length === 0} className="w-full bg-brand-green text-white py-3 rounded-lg text-xl font-bold hover:bg-brand-green-dark disabled:bg-gray-400">
+                <button type="submit" disabled={isSubmitting || cart.length === 0} className="w-full bg-brand-green text-white py-3 rounded-lg text-xl font-bold hover:bg-brand-green-dark disabled:bg-slate-400">
                     {isSubmitting ? 'প্রসেসিং...' : `অর্ডার টি কনফার্ম করুন ৳${total.toLocaleString('bn-BD')}`}
                 </button>
             </div>

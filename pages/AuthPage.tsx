@@ -4,8 +4,10 @@ import type { Customer } from '../types';
 
 interface AuthPageProps {
     navigateTo: (page: Page) => void;
-    onLogin: (email: string, password: string) => boolean;
-    onRegister: (newCustomerData: Omit<Customer, 'id' | 'totalOrders' | 'totalSpent' | 'joinDate' | 'orderIds'>) => boolean;
+    // FIX: Updated onLogin to return a Promise to match the async handler in App.tsx.
+    onLogin: (email: string, password: string) => Promise<boolean>;
+    // FIX: Updated onRegister to return a Promise to match the async handler in App.tsx.
+    onRegister: (newCustomerData: Omit<Customer, 'id' | 'totalOrders' | 'totalSpent' | 'joinDate' | 'orderIds'>) => Promise<boolean>;
 }
 
 export const AuthPage: React.FC<AuthPageProps> = ({ navigateTo, onLogin, onRegister }) => {
@@ -20,19 +22,21 @@ export const AuthPage: React.FC<AuthPageProps> = ({ navigateTo, onLogin, onRegis
     const [regPassword, setRegPassword] = useState('');
     const [error, setError] = useState('');
 
-    const handleLoginSubmit = (e: React.FormEvent) => {
+    // FIX: Made the function async and added await for the onLogin call.
+    const handleLoginSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
-        const success = onLogin(loginEmail, loginPassword);
+        const success = await onLogin(loginEmail, loginPassword);
         if (!success) {
             setError('ইমেইল অথবা পাসওয়ার্ড সঠিক নয়।');
         }
     };
 
-    const handleRegisterSubmit = (e: React.FormEvent) => {
+    // FIX: Made the function async and added await for the onRegister call.
+    const handleRegisterSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
-        const success = onRegister({ name: regName, email: regEmail, phone: regPhone, password: regPassword });
+        const success = await onRegister({ name: regName, email: regEmail, phone: regPhone, password: regPassword });
         if (!success) {
             setError('এই ইমেইল দিয়ে ইতিমধ্যে একটি একাউন্ট খোলা হয়েছে।');
         }
@@ -46,31 +50,28 @@ export const AuthPage: React.FC<AuthPageProps> = ({ navigateTo, onLogin, onRegis
                 {isLoginView ? (
                     <form onSubmit={handleLoginSubmit} className="space-y-4">
                         <div>
-                            <label htmlFor="login-email" className="block text-sm font-medium text-gray-700">ইমেইল</label>
+                            <label htmlFor="login-email" className="block text-sm font-medium text-gray-700 mb-1">ইমেইল</label>
                             <input
                                 type="email"
                                 id="login-email"
                                 value={loginEmail}
                                 onChange={(e) => setLoginEmail(e.target.value)}
                                 required
-                                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                             />
                         </div>
                         <div>
-                            {/* FIX: Added missing className attribute */}
-                            <label htmlFor="login-password" className="block text-sm font-medium text-gray-700">পাসওয়ার্ড</label>
+                            <label htmlFor="login-password" className="block text-sm font-medium text-gray-700 mb-1">পাসওয়ার্ড</label>
                             <input
                                 type="password"
                                 id="login-password"
                                 value={loginPassword}
                                 onChange={(e) => setLoginPassword(e.target.value)}
                                 required
-                                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                             />
                         </div>
                         <button
                             type="submit"
-                            className="w-full bg-brand-green text-white py-2.5 rounded-md font-semibold hover:bg-brand-green-dark"
+                            className="w-full bg-brand-green text-white py-2.5 rounded-lg font-semibold hover:bg-brand-green-dark"
                         >
                             লগইন
                         </button>
@@ -78,26 +79,22 @@ export const AuthPage: React.FC<AuthPageProps> = ({ navigateTo, onLogin, onRegis
                 ) : (
                     <form onSubmit={handleRegisterSubmit} className="space-y-4">
                         <div>
-                            {/* FIX: Added missing className attribute */}
-                            <label htmlFor="reg-name" className="block text-sm font-medium text-gray-700">আপনার নাম</label>
-                            <input type="text" id="reg-name" value={regName} onChange={(e) => setRegName(e.target.value)} required className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                            <label htmlFor="reg-name" className="block text-sm font-medium text-gray-700 mb-1">আপনার নাম</label>
+                            <input type="text" id="reg-name" value={regName} onChange={(e) => setRegName(e.target.value)} required />
                         </div>
                         <div>
-                            {/* FIX: Added missing className attribute */}
-                            <label htmlFor="reg-email" className="block text-sm font-medium text-gray-700">ইমেইল</label>
-                            <input type="email" id="reg-email" value={regEmail} onChange={(e) => setRegEmail(e.target.value)} required className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                            <label htmlFor="reg-email" className="block text-sm font-medium text-gray-700 mb-1">ইমেইল</label>
+                            <input type="email" id="reg-email" value={regEmail} onChange={(e) => setRegEmail(e.target.value)} required />
                         </div>
                         <div>
-                            {/* FIX: Added missing className attribute */}
-                            <label htmlFor="reg-phone" className="block text-sm font-medium text-gray-700">ফোন নাম্বার</label>
-                            <input type="tel" id="reg-phone" value={regPhone} onChange={(e) => setRegPhone(e.target.value)} required className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                            <label htmlFor="reg-phone" className="block text-sm font-medium text-gray-700 mb-1">ফোন নাম্বার</label>
+                            <input type="tel" id="reg-phone" value={regPhone} onChange={(e) => setRegPhone(e.target.value)} required />
                         </div>
                         <div>
-                            {/* FIX: Added missing className attribute */}
-                            <label htmlFor="reg-password" className="block text-sm font-medium text-gray-700">পাসওয়ার্ড</label>
-                            <input type="password" id="reg-password" value={regPassword} onChange={(e) => setRegPassword(e.target.value)} required className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"/>
+                            <label htmlFor="reg-password" className="block text-sm font-medium text-gray-700 mb-1">পাসওয়ার্ড</label>
+                            <input type="password" id="reg-password" value={regPassword} onChange={(e) => setRegPassword(e.target.value)} required />
                         </div>
-                        <button type="submit" className="w-full bg-brand-green text-white py-2.5 rounded-md font-semibold hover:bg-brand-green-dark">
+                        <button type="submit" className="w-full bg-brand-green text-white py-2.5 rounded-lg font-semibold hover:bg-brand-green-dark">
                             রেজিস্টার
                         </button>
                     </form>

@@ -3,6 +3,7 @@ import { ProductsGrid } from '../components/ProductsGrid';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import type { Product } from '../types';
 import type { Page } from '../App';
+import { HeartIcon } from '../components/icons';
 
 interface WishlistPageProps {
     products: Product[];
@@ -40,9 +41,7 @@ export const WishlistPage: React.FC<WishlistPageProps> = ({ products, wishlistPr
                         </div>
                     ) : (
                         <div className="mt-12 text-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 016.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z" />
-                            </svg>
+                            <HeartIcon className="mx-auto h-12 w-12 text-gray-400" />
                             <h2 className="mt-2 text-xl font-semibold text-gray-800">আপনার পছন্দের তালিকা খালি</h2>
                             <p className="mt-1 text-gray-500">পণ্য ব্রাউজ করুন এবং আপনার পছন্দের পণ্য যোগ করুন।</p>
                             <button

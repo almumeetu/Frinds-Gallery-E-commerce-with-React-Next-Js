@@ -8,14 +8,16 @@ interface OrderManagementProps {
     onUpdateStatus: (orderId: string, status: Order['status']) => void;
 }
 
-const statusOptions: Order['status'][] = ['প্রক্রিয়াধীন', 'শিপিং-এ', 'পৌঁছে গেছে', 'বাতিল'];
+// FIX: Using OrderStatus enum members for options.
+const statusOptions: OrderStatus[] = [OrderStatus.Processing, OrderStatus.Shipped, OrderStatus.Delivered, OrderStatus.Cancelled];
 
+// FIX: Updated switch cases to use OrderStatus enum members.
 const getStatusColor = (status: Order['status']) => {
     switch (status) {
-        case 'প্রক্রিয়াধীন': return 'bg-yellow-100 text-yellow-800';
-        case 'শিপিং-এ': return 'bg-blue-100 text-blue-800';
-        case 'পৌঁছে গেছে': return 'bg-green-100 text-green-800';
-        case 'বাতিল': return 'bg-red-100 text-red-800';
+        case OrderStatus.Processing: return 'bg-yellow-100 text-yellow-800';
+        case OrderStatus.Shipped: return 'bg-blue-100 text-blue-800';
+        case OrderStatus.Delivered: return 'bg-green-100 text-green-800';
+        case OrderStatus.Cancelled: return 'bg-red-100 text-red-800';
         default: return 'bg-gray-100 text-gray-800';
     }
 };

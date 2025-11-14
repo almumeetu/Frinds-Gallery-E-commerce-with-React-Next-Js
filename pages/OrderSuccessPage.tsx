@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Page } from '../App';
 import type { OrderDetails } from '../types';
+import { CheckCircleIcon } from '../components/icons';
 
 interface OrderSuccessPageProps {
   orderDetails: OrderDetails | null;
@@ -28,9 +29,7 @@ export const OrderSuccessPage: React.FC<OrderSuccessPageProps> = ({ orderDetails
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white p-8 md:p-12 rounded-lg shadow-md border text-center">
             <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-6">
-                <svg className="h-10 w-10 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                </svg>
+                <CheckCircleIcon className="h-12 w-12 text-brand-green" />
             </div>
           <h1 className="text-2xl font-bold text-gray-800">প্রিয়, {orderDetails.customerName}</h1>
           <p className="mt-2 text-gray-600">আপনার অর্ডারটি গ্রহণ করা হয়েছে।</p>
