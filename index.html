@@ -11,8 +11,9 @@
     <style>
       body {
         font-family: 'Hind Siliguri', sans-serif;
-        background-color: #FDFCF9;
+        background-color: #f8fafc; /* Tailwind slate-50 */
       }
+      /* Marquee styles remain unchanged */
       @keyframes marquee {
         from { transform: translateX(0); }
         to { transform: translateX(-50%); }
@@ -27,7 +28,8 @@
       .group:hover .animate-marquee-fast {
         animation-play-state: paused;
       }
-      /* Global Form Styles */
+      
+      /* Updated Global Form Styles */
       input[type="text"],
       input[type="email"],
       input[type="password"],
@@ -36,11 +38,11 @@
       input[type="number"],
       textarea,
       select {
-        @apply block w-full px-4 py-2.5 text-base text-slate-700 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-green/50 focus:border-brand-green transition duration-150 ease-in-out;
+        @apply block w-full px-4 py-2.5 text-base text-slate-700 bg-white border border-slate-300 rounded-lg shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-green/80 focus:border-brand-green transition duration-200 ease-in-out;
       }
       input[type="radio"],
       input[type="checkbox"] {
-          @apply h-4 w-4 text-brand-green border-slate-300 focus:ring-brand-green focus:ring-2;
+          @apply h-4 w-4 text-brand-green border-slate-400 focus:ring-brand-green focus:ring-offset-2;
       }
       select {
         -webkit-appearance: none;
@@ -57,13 +59,16 @@
       tailwind.config = {
         theme: {
           extend: {
+            maxWidth: {
+              '8xl': '1735px',
+            },
             colors: {
-              'brand-green': '#047857', // A slightly brighter, more modern green
-              'brand-green-dark': '#065f46',
-              'brand-cream': '#FDFCF9', // Soft background color
-              'brand-dark': '#1e293b', // Slate 800 for dark text/elements
-              'brand-dark-hover': '#334155', // Slate 700
-              'brand-accent': '#f59e0b', // A warm, friendly amber
+              'brand-green': '#10b981', // emerald-500
+              'brand-green-dark': '#059669', // emerald-600
+              'brand-cream': '#f8fafc', // slate-50
+              'brand-dark': '#1e293b', // slate-800
+              'brand-dark-hover': '#334155', // slate-700
+              'brand-accent': '#f59e0b', // amber-500
             },
           },
         },

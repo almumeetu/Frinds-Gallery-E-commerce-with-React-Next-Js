@@ -2,24 +2,24 @@ import React from 'react';
 import { SparklesIcon, FireIcon, TruckIcon, ChatBubbleLeftRightIcon } from './icons';
 
 const featureData = [
-    { title: "নতুন কালেকশন", description: "সর্বশেষ ডিজাইন দেখুন", link: "#", icon: <SparklesIcon /> },
-    { title: "বেস্ট ডিল", description: "সেরা দামে সেরা পণ্য", link: "#", icon: <FireIcon /> },
-    { title: "দ্রুত ডেলিভারি", description: "সারা দেশে হোম ডেলিভারি", link: "#", icon: <TruckIcon /> },
-    { title: "কাস্টমার সাপোর্ট", description: "২৪/৭ হেল্পলাইন", link: "#", icon: <ChatBubbleLeftRightIcon /> },
+    { title: "নতুন কালেকশন", description: "সর্বশেষ ডিজাইন দেখুন", icon: <SparklesIcon /> },
+    { title: "বেস্ট ডিল", description: "সেরা দামে সেরা পণ্য", icon: <FireIcon /> },
+    { title: "দ্রুত ডেলিভারি", description: "সারা দেশে হোম ডেলিভারি", icon: <TruckIcon /> },
+    { title: "কাস্টমার সাপোর্ট", description: "২৪/৭ হেল্পলাইন", icon: <ChatBubbleLeftRightIcon /> },
 ];
 
 export const FeatureCards: React.FC = () => {
     return (
         <div className="w-full">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {featureData.map((feature, index) => (
-                    <a href={feature.link} key={index} className="flex items-center p-4 bg-white border border-slate-200 rounded-lg hover:bg-brand-green hover:text-white transition-colors group">
-                        <div className="text-brand-green group-hover:text-white text-3xl mr-4">{feature.icon}</div>
+                    <div key={index} className="flex items-center p-5 bg-white border border-slate-200/80 rounded-xl hover:shadow-md hover:-translate-y-1 transition-all duration-300 group">
+                        <div className="text-brand-green text-3xl mr-4 bg-green-100 p-3 rounded-lg">{feature.icon}</div>
                         <div>
-                            <h3 className="font-semibold text-brand-dark group-hover:text-white">{feature.title}</h3>
-                            <p className="text-sm text-slate-500 group-hover:text-slate-200">{feature.description}</p>
+                            <h3 className="font-semibold text-brand-dark">{feature.title}</h3>
+                            <p className="text-sm text-slate-500">{feature.description}</p>
                         </div>
-                    </a>
+                    </div>
                 ))}
             </div>
         </div>

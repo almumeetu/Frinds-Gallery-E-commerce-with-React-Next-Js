@@ -20,6 +20,7 @@ import { AuthPage } from './pages/AuthPage';
 import { ReturnsPage } from './pages/ReturnsPage';
 import { TermsPage } from './pages/TermsPage';
 import { QuickViewModal } from './components/QuickViewModal';
+import { MobileBottomNav } from './components/MobileBottomNav';
 import type { Product, CartItem, OrderDetails, Order, Customer, OrderItem } from './types';
 import * as api from './services/api';
 
@@ -154,7 +155,8 @@ const App: React.FC = () => {
   };
 
   const buyNow = (productId: string, quantity: number) => {
-    addToCart(productId, quantity);
+    // Clear cart and add only the buy now item for a streamlined checkout
+    setCart([{ productId, quantity }]);
     navigateTo('checkout');
   };
 
@@ -234,7 +236,6 @@ const App: React.FC = () => {
                   orders={orders}
                   customers={customers}
                   onAddProduct={handleAddProduct}
-                  // FIX: Corrected typo from onUpdateProduct to handleUpdateProduct
                   onUpdateProduct={handleUpdateProduct}
                   onDeleteProduct={handleDeleteProduct}
                   onUpdateOrderStatus={handleUpdateOrderStatus}
@@ -249,7 +250,7 @@ const App: React.FC = () => {
         return <ContactPage navigateTo={navigateTo} />;
       case 'account':
         return currentUser 
-          ? <AccountPage navigateTo={navigateTo} currentUser={currentUser} orders={orders} onLogout={handleLogout} />
+          ? <AccountPage navigateTo={navigateTo} currentUser={currentUser} orders={orders.filter(o => currentUser.orderIds.includes(o.id))} onLogout={handleLogout} />
           : <AuthPage navigateTo={navigateTo} onLogin={handleLogin} onRegister={handleRegister} />;
       case 'returns':
         return <ReturnsPage navigateTo={navigateTo} />;
@@ -265,7 +266,7 @@ const App: React.FC = () => {
         return (
             <div className="min-h-screen bg-brand-cream flex items-center justify-center">
                 <div className="flex flex-col items-center">
-                    <svg className="animate-spin h-10 w-10 text-brand-green" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <svg className="animate-spin h-12 w-12 text-brand-green" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
@@ -278,12 +279,13 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-brand-cream text-brand-dark flex flex-col">
       <Header navigateTo={navigateTo} navigateToShop={navigateToShop} cartItemCount={cart.reduce((sum, item) => sum + item.quantity, 0)} wishlistItemCount={wishlist.length} currentUser={currentUser} onLogout={handleLogout} />
-      <main className="flex-grow w-full">
+      <main className="flex-grow w-full pb-20 lg:pb-0">
         {renderPage()}
       </main>
       <Footer navigateTo={navigateTo} navigateToShop={navigateToShop} />
       <FloatingCart cart={cart} products={products} navigateTo={navigateTo} />
       <FloatingSocials />
+      <MobileBottomNav currentPage={currentPage} navigateTo={navigateTo} />
       {quickViewProduct && (
         <QuickViewModal
             product={quickViewProduct}

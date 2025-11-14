@@ -20,6 +20,7 @@ let products: Product[] = [
 ];
 
 let customers: Customer[] = [
+    // This user is designated as the admin for demo purposes.
     {
         id: 'cust_1',
         name: 'আমিনা বেগম',
