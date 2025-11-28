@@ -40,15 +40,15 @@ export const mockReviews: Review[] = [
 ];
 
 export const brands = [
-    { name: 'Brand A', logoUrl: 'https://via.placeholder.com/150x50/cccccc/808080?text=Brand+A' },
-    { name: 'Brand B', logoUrl: 'https://via.placeholder.com/150x50/cccccc/808080?text=Brand+B' },
-    { name: 'Brand C', logoUrl: 'https://via.placeholder.com/150x50/cccccc/808080?text=Brand+C' },
-    { name: 'Brand D', logoUrl: 'https://via.placeholder.com/150x50/cccccc/808080?text=Brand+D' },
-    { name: 'Brand E', logoUrl: 'https://via.placeholder.com/150x50/cccccc/808080?text=Brand+E' },
-    { name: 'Brand F', logoUrl: 'https://via.placeholder.com/150x50/cccccc/808080?text=Brand+F' },
+    { name: 'Premium Quality', logoUrl: 'https://cdn-icons-png.flaticon.com/512/2917/2917995.png' },
+    { name: 'Fast Delivery', logoUrl: 'https://cdn-icons-png.flaticon.com/512/3081/3081559.png' },
+    { name: 'Secure Payment', logoUrl: 'https://cdn-icons-png.flaticon.com/512/4108/4108833.png' },
+    { name: 'Customer Support', logoUrl: 'https://cdn-icons-png.flaticon.com/512/3079/3079178.png' },
+    { name: 'Easy Returns', logoUrl: 'https://cdn-icons-png.flaticon.com/512/2769/2769339.png' },
+    { name: 'Best Price', logoUrl: 'https://cdn-icons-png.flaticon.com/512/3135/3135706.png' },
 ];
 
 export const paymentMethods = [
-    { id: 'cod', name: 'ক্যাশ অন ডেলিভারি', icon: 'https://i.ibb.co/pWk2R4z/cod.png' },
-    { id: 'bkash', name: 'বিকাশ', icon: 'https://i.ibb.co/fH4C8dF/bkash.png' },
+    { id: 'cod', name: 'ক্যাশ অন ডেলিভারি', icon: 'https://cdn-icons-png.flaticon.com/512/4108/4108042.png' },
+    { id: 'bkash', name: 'বিকাশ', icon: 'https://seeklogo.com/images/B/bkash-logo-835789094F-seeklogo.com.png' },
 ];

@@ -80,12 +80,11 @@ export const Footer: React.FC<FooterProps> = ({ navigateTo, navigateToShop }) =>
              <div className="border-t border-slate-200 bg-white">
                 <div className="w-full mx-auto max-w-8xl py-6 px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center text-sm">
                     <p className="text-slate-500">&copy; ২০২৪ ফ্রেন্ডস গ্যালারি। সর্বস্বত্ব সংরক্ষিত।</p>
-                    <div className="flex space-x-2 mt-4 sm:mt-0 items-center">
-                        <span className="text-slate-500 hidden sm:inline">আমরা গ্রহণ করি:</span>
-                        <img src="https://i.ibb.co/fH4C8dF/bkash.png" alt="bKash" className="h-6" />
-                        <img src="https://i.ibb.co/pnv1p2h/nagad.png" alt="Nagad" className="h-6" />
-                        <img src="https://i.ibb.co/qMsFWpP/rocket.png" alt="Rocket" className="h-6" />
-                        <img src="https://i.ibb.co/pWk2R4z/cod.png" alt="Cash on Delivery" className="h-6" />
+                    <div className="flex space-x-3 mt-4 sm:mt-0 items-center">
+                        <span className="text-slate-500 hidden sm:inline text-xs">আমরা গ্রহণ করি:</span>
+                        <img src="https://seeklogo.com/images/B/bkash-logo-835789094F-seeklogo.com.png" alt="bKash" className="h-7 object-contain" />
+                        <img src="https://seeklogo.com/images/N/nagad-logo-7A70CCFB0D-seeklogo.com.png" alt="Nagad" className="h-7 object-contain" />
+                        <img src="https://cdn-icons-png.flaticon.com/512/4108/4108042.png" alt="Cash on Delivery" className="h-7 object-contain" />
                     </div>
                 </div>
             </div>

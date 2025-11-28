@@ -133,15 +133,52 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ cart, products, upda
                 <div className="flex justify-between text-xl font-bold text-brand-dark mt-2 pt-2 border-t"><span>মোট</span> <span>৳{total.toLocaleString('bn-BD')}</span></div>
             </div>
             <div className="mt-6">
-                 <h3 className="text-lg font-semibold mb-2">পেমেন্ট পদ্ধতি</h3>
-                 <div className="grid grid-cols-2 gap-2">
+                 <h3 className="text-lg font-semibold mb-3">পেমেন্ট পদ্ধতি</h3>
+                 <div className="space-y-3">
                     {paymentMethods.map(method => (
-                        <label key={method.id} className={`flex items-center p-3 border rounded-lg cursor-pointer transition-all ${paymentMethod === method.id ? 'border-brand-green bg-green-50 ring-2 ring-brand-green' : 'border-slate-300'}`}>
-                            <input type="radio" name="payment" value={method.id} checked={paymentMethod === method.id} onChange={(e) => setPaymentMethod(e.target.value)} className="h-5 w-5"/>
-                            <img src={method.icon} alt={method.name} className="h-6 ml-4" />
+                        <label key={method.id} className={`flex items-center justify-between p-4 border-2 rounded-xl cursor-pointer transition-all hover:shadow-md ${paymentMethod === method.id ? 'border-brand-green bg-green-50 shadow-lg' : 'border-slate-200 hover:border-brand-green/50'}`}>
+                            <div className="flex items-center space-x-4">
+                                <input 
+                                    type="radio" 
+                                    name="payment" 
+                                    value={method.id} 
+                                    checked={paymentMethod === method.id} 
+                                    onChange={(e) => setPaymentMethod(e.target.value)} 
+                                    className="h-5 w-5 text-brand-green focus:ring-brand-green"
+                                />
+                                <div className="flex items-center space-x-3">
+                                    <img src={method.icon} alt={method.name} className="h-8 w-auto object-contain" />
+                                    <span className="font-medium text-slate-700">{method.name}</span>
+                                </div>
+                            </div>
+                            {paymentMethod === method.id && (
+                                <svg className="h-6 w-6 text-brand-green" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
+                                </svg>
+                            )}
                         </label>
                     ))}
                  </div>
+                 {paymentMethod === 'cod' && (
+                    <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                        <p className="text-sm text-blue-800 flex items-start">
+                            <svg className="h-5 w-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd"/>
+                            </svg>
+                            পণ্য হাতে পেয়ে টাকা পরিশোধ করুন। ডেলিভারি ম্যান আপনার কাছে পৌঁছানোর পর টাকা দিন।
+                        </p>
+                    </div>
+                 )}
+                 {paymentMethod === 'bkash' && (
+                    <div className="mt-3 p-3 bg-pink-50 border border-pink-200 rounded-lg">
+                        <p className="text-sm text-pink-800 flex items-start">
+                            <svg className="h-5 w-5 text-pink-600 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd"/>
+                            </svg>
+                            অর্ডার কনফার্ম করার পর আমরা আপনাকে বিকাশ পেমেন্ট নম্বর পাঠাবো।
+                        </p>
+                    </div>
+                 )}
             </div>
             <div className="mt-6">
                 <button type="submit" disabled={isSubmitting || cart.length === 0} className="w-full bg-brand-green text-white py-3 rounded-lg text-lg font-bold hover:bg-brand-green-dark disabled:bg-slate-400 disabled:cursor-not-allowed transition-transform transform hover:scale-105">

@@ -1,225 +1,284 @@
-
+import { supabase } from './supabase';
 import type { Product, Order, Customer, SalesSummary, OrderItem } from '../types';
 import { OrderStatus } from '../types';
 
-// --- MOCK DATABASE ---
-// In a real application, this data would come from a database.
-// We are keeping it here to simulate a backend API.
+// --- REAL SUPABASE BACKEND ---
+// All data now comes from Supabase database
 
-let products: Product[] = [
-    { id: 'prod_1', name: 'জিলবাব লং খিমার', price: 990, originalPrice: 1200, imageUrl: 'https://i.ibb.co/6r1qGz8/khimar.jpg', category: 'long-khimar', sku: 'FG-LK-001', stock: 15, rating: 4.5, reviewCount: 65 },
-    { id: 'prod_2', name: 'প্রিমিয়াম জর্জেট হিজাব', price: 699, originalPrice: 999, imageUrl: 'https://i.ibb.co/Kz9V31g/hijab.jpg', category: 'hijab', sku: 'FG-HJ-005', stock: 25, rating: 4.8, reviewCount: 120 },
-    { id: 'prod_3', name: 'কমফোর্ট ফিট ফুল কভারেজ ব্রা', price: 750, imageUrl: 'https://i.ibb.co/Yd4Bv3D/bra.jpg', category: 'innar-collection', sku: 'FG-IN-012', stock: 30, rating: 4.2, reviewCount: 40 },
-    { id: 'prod_4', name: 'স্টাইলিশ কটন থ্রি-পিস', price: 2250, imageUrl: 'https://i.ibb.co/fDbP2d6/three-piece.jpg', category: 'three-piece', sku: 'FG-TP-020', stock: 10, rating: 4.9, reviewCount: 88 },
-    { id: 'prod_5', name: 'প্রিমিয়াম সফট হ্যান্ড গ্লাভস (কালো)', price: 150, originalPrice: 200, imageUrl: 'https://i.ibb.co/XzB6cK7/gloves.jpg', category: 'islamic-item', sku: 'FG-IS-003', stock: 50, rating: 4.0, reviewCount: 32 },
-    { id: 'prod_6', name: 'আরবিয়ান চেরি লং খিমার', price: 1150, originalPrice: 1400, imageUrl: 'https://i.ibb.co/P9yF5s1/khimar2.jpg', category: 'long-khimar', sku: 'FG-LK-002', stock: 12, rating: 4.6, reviewCount: 75 },
-    { id: 'prod_7', name: 'ইন্দোনেশিয়ান প্রিমিয়াম হিজাব', price: 799, imageUrl: 'https://i.ibb.co/gZ7k2tJ/hijab2.jpg', category: 'hijab', sku: 'FG-HJ-008', stock: 20, rating: 4.7, reviewCount: 95 },
-    { id: 'prod_8', name: 'সিমলেস কমফোর্ট ব্রা', price: 850, imageUrl: 'https://i.ibb.co/Qv6Y0yR/bra2.jpg', category: 'innar-collection', sku: 'FG-IN-015', stock: 0, rating: 4.3, reviewCount: 50 },
-    { id: 'prod_9', name: 'ডিজিটাল প্রিন্ট কটন থ্রি-পিস', price: 2400, originalPrice: 2800, imageUrl: 'https://i.ibb.co/L5h5q6p/three-piece2.jpg', category: 'three-piece', sku: 'FG-TP-022', stock: 8, rating: 5.0, reviewCount: 110 },
-    { id: 'prod_10', name: 'ইসলামিক মোজা (কালো)', price: 90, originalPrice: 150, imageUrl: 'https://i.ibb.co/mH6qgG3/socks.jpg', category: 'islamic-item', sku: 'FG-IS-004', stock: 40, rating: 3.9, reviewCount: 25 },
-];
+// Helper to map database columns to frontend types
+const mapProduct = (data: any): Product => ({
+  id: data.id,
+  name: data.name,
+  price: Number(data.price),
+  originalPrice: data.original_price ? Number(data.original_price) : undefined,
+  imageUrl: data.image_url,
+  category: data.category,
+  sku: data.sku,
+  stock: data.stock,
+  rating: Number(data.rating),
+  reviewCount: data.review_count
+});
 
-let customers: Customer[] = [
-    // This user is designated as the admin for demo purposes.
-    {
-        id: 'cust_1',
-        name: 'আমিনা বেগম',
-        email: 'amina@example.com',
-        phone: '01712345678',
-        totalOrders: 2,
-        totalSpent: 1689,
-        joinDate: '2024-05-15T10:00:00Z',
-        password: 'password123',
-        orderIds: ['order_1', 'order_2']
-    },
-    {
-        id: 'cust_2',
-        name: 'সাদিয়া আফরিন',
-        email: 'sadia@example.com',
-        phone: '01812345678',
-        totalOrders: 1,
-        totalSpent: 2250,
-        joinDate: '2024-06-20T14:30:00Z',
-        password: 'password123',
-        orderIds: ['order_3']
-    },
-];
+const mapOrder = (data: any): Order => ({
+  id: data.id,
+  orderId: data.order_id,
+  customerName: data.customer_name,
+  customerId: data.customer_id,
+  date: data.date,
+  totalAmount: Number(data.total_amount),
+  status: data.status as OrderStatus,
+  items: data.items,
+  shippingAddress: data.shipping_address
+});
 
-let orders: Order[] = [
-    {
-        id: 'order_1',
-        orderId: 'FG-2024-83612',
-        customerName: 'আমিনা বেগম',
-        customerId: 'cust_1',
-        date: '2024-07-22T11:00:00Z',
-        totalAmount: 990,
-        // FIX: Using OrderStatus enum instead of string literal.
-        status: OrderStatus.Delivered,
-        items: [{ productId: 'prod_1', quantity: 1, price: 990 }],
-        shippingAddress: 'ধানমন্ডি, ঢাকা'
-    },
-    {
-        id: 'order_2',
-        orderId: 'FG-2024-91234',
-        customerName: 'আমিনা বেগম',
-        customerId: 'cust_1',
-        date: '2024-07-25T14:20:00Z',
-        totalAmount: 699,
-        // FIX: Using OrderStatus enum instead of string literal.
-        status: OrderStatus.Shipped,
-        items: [{ productId: 'prod_2', quantity: 1, price: 699 }],
-        shippingAddress: 'ধানমন্ডি, ঢাকা'
-    },
-    {
-        id: 'order_3',
-        orderId: 'FG-2024-75643',
-        customerName: 'সাদিয়া আফরিন',
-        customerId: 'cust_2',
-        date: '2024-07-24T09:45:00Z',
-        totalAmount: 2250,
-        // FIX: Using OrderStatus enum instead of string literal.
-        status: OrderStatus.Processing,
-        items: [{ productId: 'prod_4', quantity: 1, price: 2250 }],
-        shippingAddress: 'কোতোয়ালী, চট্টগ্রাম'
-    },
-];
-
-
-// --- API FUNCTIONS ---
-const simulateDelay = (delay: number) => new Promise(res => setTimeout(res, delay));
+const mapCustomer = (data: any): Customer => ({
+  id: data.id,
+  name: data.name,
+  email: data.email,
+  phone: data.phone,
+  totalOrders: data.total_orders,
+  totalSpent: Number(data.total_spent),
+  joinDate: data.join_date,
+  password: data.password,
+  orderIds: data.order_ids || []
+});
 
 // --- Data Fetching ---
 export const getProducts = async (): Promise<Product[]> => {
-    await simulateDelay(500);
-    return [...products];
+  const { data, error } = await supabase
+    .from('products')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching products:', error);
+    return [];
+  }
+  
+  return (data || []).map(mapProduct);
 };
 
 export const getOrders = async (): Promise<Order[]> => {
-    await simulateDelay(500);
-    return [...orders];
+  const { data, error } = await supabase
+    .from('orders')
+    .select('*')
+    .order('date', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching orders:', error);
+    return [];
+  }
+  
+  return (data || []).map(mapOrder);
 };
 
 export const getCustomers = async (): Promise<Customer[]> => {
-    await simulateDelay(500);
-    return [...customers];
+  const { data, error } = await supabase
+    .from('customers')
+    .select('*')
+    .order('join_date', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching customers:', error);
+    return [];
+  }
+  
+  return (data || []).map(mapCustomer);
 };
 
 // --- Authentication ---
 export const login = async (email: string, password: string): Promise<Customer | null> => {
-    await simulateDelay(700);
-    const customer = customers.find(c => c.email.toLowerCase() === email.toLowerCase() && c.password === password);
-    return customer || null;
-}
+  const { data, error } = await supabase
+    .from('customers')
+    .select('*')
+    .eq('email', email.toLowerCase())
+    .eq('password', password)
+    .single();
+
+  if (error || !data) {
+    return null;
+  }
+  
+  return mapCustomer(data);
+};
 
 export const register = async (newCustomerData: Omit<Customer, 'id' | 'totalOrders' | 'totalSpent' | 'joinDate' | 'orderIds'>): Promise<Customer> => {
-    await simulateDelay(700);
-    const newCustomer: Customer = {
-      ...newCustomerData,
-      id: `cust_${Date.now()}`,
-      totalOrders: 0,
-      totalSpent: 0,
-      joinDate: new Date().toISOString(),
-      orderIds: [],
-    };
-    customers = [...customers, newCustomer];
-    return newCustomer;
-}
+  const { data, error } = await supabase
+    .from('customers')
+    .insert([{
+      name: newCustomerData.name,
+      email: newCustomerData.email.toLowerCase(),
+      phone: newCustomerData.phone,
+      password: newCustomerData.password,
+      total_orders: 0,
+      total_spent: 0,
+      join_date: new Date().toISOString(),
+      order_ids: []
+    }])
+    .select()
+    .single();
+
+  if (error) {
+    throw new Error('Registration failed: ' + error.message);
+  }
+  
+  return mapCustomer(data);
+};
 
 // --- Order Management ---
-export const createOrder = async (orderData: { customerName: string; totalAmount: number; shippingAddress: string; items: OrderItem[] }, currentUser: Customer | null): Promise<Order> => {
-    await simulateDelay(1000);
-    const newOrderId = `FG-2024-${Math.floor(10000 + Math.random() * 90000)}`;
-    const newOrder: Order = {
-        id: `order_${Date.now()}`,
-        orderId: newOrderId,
-        customerName: orderData.customerName,
-        date: new Date().toISOString(),
-        totalAmount: orderData.totalAmount,
-        status: OrderStatus.Processing,
-        items: orderData.items,
-        shippingAddress: orderData.shippingAddress,
-        customerId: currentUser?.id,
-    };
-    orders = [newOrder, ...orders];
-    
-    if (currentUser) {
-        customers = customers.map(c => 
-            c.id === currentUser.id 
-            ? { ...c, orderIds: [...c.orderIds, newOrder.id], totalOrders: c.totalOrders + 1, totalSpent: c.totalSpent + newOrder.totalAmount } 
-            : c
-        );
-    }
-    return newOrder;
+export const createOrder = async (
+  orderData: { customerName: string; totalAmount: number; shippingAddress: string; items: OrderItem[] }, 
+  currentUser: Customer | null
+): Promise<Order> => {
+  const orderId = `FG-${Date.now()}`;
+  
+  const { data, error } = await supabase
+    .from('orders')
+    .insert([{
+      order_id: orderId,
+      customer_name: orderData.customerName,
+      customer_id: currentUser?.id,
+      items: orderData.items,
+      total_amount: orderData.totalAmount,
+      shipping_address: orderData.shippingAddress,
+      status: OrderStatus.Processing,
+      date: new Date().toISOString()
+    }])
+    .select()
+    .single();
+
+  if (error) {
+    throw new Error('Order creation failed: ' + error.message);
+  }
+
+  // Update customer stats if logged in
+  if (currentUser) {
+    await supabase
+      .from('customers')
+      .update({
+        total_orders: currentUser.totalOrders + 1,
+        total_spent: currentUser.totalSpent + orderData.totalAmount,
+        order_ids: [...currentUser.orderIds, data.id]
+      })
+      .eq('id', currentUser.id);
+  }
+  
+  return mapOrder(data);
 };
 
 export const getOrderStatus = async (trackingId: string): Promise<OrderStatus> => {
-    await simulateDelay(1000);
-    const order = orders.find(o => o.orderId === trackingId);
-    if (order) {
-        return order.status;
-    }
-    // Simulate random status if not found for demo purposes
-    if (trackingId.startsWith("FG-")) {
-        const statuses = [OrderStatus.Processing, OrderStatus.Shipped, OrderStatus.Delivered];
-        const randomIndex = Math.floor(Math.random() * statuses.length);
-        return statuses[randomIndex];
-    }
+  const { data, error } = await supabase
+    .from('orders')
+    .select('status')
+    .eq('order_id', trackingId)
+    .single();
+
+  if (error || !data) {
     return OrderStatus.NotFound;
+  }
+  
+  return data.status as OrderStatus;
 };
 
 export const updateOrderStatus = async (orderId: string, status: Order['status']): Promise<Order> => {
-    await simulateDelay(400);
-    let updatedOrder: Order | undefined;
-    orders = orders.map(order => {
-        if (order.id === orderId) {
-            updatedOrder = { ...order, status };
-            return updatedOrder;
-        }
-        return order;
-    });
-    if (!updatedOrder) throw new Error("Order not found");
-    return updatedOrder;
-}
+  const { data, error } = await supabase
+    .from('orders')
+    .update({ status })
+    .eq('id', orderId)
+    .select()
+    .single();
+
+  if (error) {
+    throw new Error('Order update failed: ' + error.message);
+  }
+  
+  return mapOrder(data);
+};
 
 // --- Product Management (Admin) ---
 export const addProduct = async (newProductData: Omit<Product, 'id' | 'rating' | 'reviewCount'>): Promise<Product> => {
-    await simulateDelay(600);
-    const newProduct: Product = {
-        ...newProductData,
-        id: `prod_${Date.now()}`,
-        rating: 0,
-        reviewCount: 0,
-    };
-    products = [newProduct, ...products];
-    return newProduct;
+  const { data, error } = await supabase
+    .from('products')
+    .insert([{
+      name: newProductData.name,
+      price: newProductData.price,
+      original_price: newProductData.originalPrice,
+      image_url: newProductData.imageUrl,
+      category: newProductData.category,
+      sku: newProductData.sku,
+      stock: newProductData.stock,
+      rating: 0,
+      review_count: 0
+    }])
+    .select()
+    .single();
+
+  if (error) {
+    throw new Error('Product creation failed: ' + error.message);
+  }
+  
+  return mapProduct(data);
 };
 
 export const updateProduct = async (updatedProductData: Product): Promise<Product> => {
-    await simulateDelay(600);
-    products = products.map(p => (p.id === updatedProductData.id ? updatedProductData : p));
-    return updatedProductData;
-}
+  const { data, error } = await supabase
+    .from('products')
+    .update({
+      name: updatedProductData.name,
+      price: updatedProductData.price,
+      original_price: updatedProductData.originalPrice,
+      image_url: updatedProductData.imageUrl,
+      category: updatedProductData.category,
+      sku: updatedProductData.sku,
+      stock: updatedProductData.stock,
+      rating: updatedProductData.rating,
+      review_count: updatedProductData.reviewCount
+    })
+    .eq('id', updatedProductData.id)
+    .select()
+    .single();
+
+  if (error) {
+    throw new Error('Product update failed: ' + error.message);
+  }
+  
+  return mapProduct(data);
+};
 
 export const deleteProduct = async (productId: string): Promise<{ success: boolean }> => {
-    await simulateDelay(600);
-    products = products.filter(p => p.id !== productId);
-    return { success: true };
-}
+  const { error } = await supabase
+    .from('products')
+    .delete()
+    .eq('id', productId);
 
+  if (error) {
+    throw new Error('Product deletion failed: ' + error.message);
+  }
+  
+  return { success: true };
+};
 
 // --- Dashboard Widgets ---
-export const getSalesSummary = (): Promise<SalesSummary> => {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            const totalSales = orders.reduce((sum, order) => sum + order.totalAmount, 0);
-            const totalOrdersCount = orders.length;
-            const grossProfit = totalSales * 0.25; // Assuming a 25% fixed margin
+export const getSalesSummary = async (): Promise<SalesSummary> => {
+  const { data: orders, error } = await supabase
+    .from('orders')
+    .select('total_amount, status');
 
-            resolve({
-                totalSales: `৳ ${totalSales.toLocaleString('bn-BD')}`,
-                totalOrders: totalOrdersCount.toLocaleString('bn-BD'),
-                grossProfit: `৳ ${grossProfit.toLocaleString('bn-BD')}`
-            });
-        }, 800);
-    });
+  if (error) {
+    return {
+      totalSales: '৳ 0',
+      totalOrders: '0',
+      grossProfit: '৳ 0'
+    };
+  }
+
+  const totalSales = orders.reduce((sum, order) => sum + Number(order.total_amount), 0);
+  const totalOrdersCount = orders.length;
+  const grossProfit = totalSales * 0.25; // Assuming a 25% fixed margin
+
+  return {
+    totalSales: `৳ ${totalSales.toLocaleString('bn-BD')}`,
+    totalOrders: totalOrdersCount.toLocaleString('bn-BD'),
+    grossProfit: `৳ ${grossProfit.toLocaleString('bn-BD')}`
+  };
 };
