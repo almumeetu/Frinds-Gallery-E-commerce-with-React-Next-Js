@@ -282,3 +282,4 @@ export const getSalesSummary = async (): Promise<SalesSummary> => {
     grossProfit: `৳ ${grossProfit.toLocaleString('bn-BD')}`
   };
 };
+ 
