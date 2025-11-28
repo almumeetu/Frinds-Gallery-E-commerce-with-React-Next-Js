@@ -1,127 +1,180 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { supabase } from '../services/supabase';
 import type { Product } from '../types';
-import { categories } from '../constants';
 
 interface ProductFormProps {
-  product: Product | null;
-  onClose: () => void;
-  onAddProduct: (newProduct: Omit<Product, 'id' | 'rating' | 'reviewCount'>) => void;
-  onUpdateProduct: (updatedProduct: Product) => void;
+  onSaved: (product: Product) => void;
+  // We can add a productToEdit prop later for updates
+  // productToEdit?: Product | null; 
 }
 
-const initialFormState: Omit<Product, 'id' | 'rating' | 'reviewCount'> = {
-  name: '',
-  price: 0,
-  originalPrice: undefined,
-  imageUrl: '',
-  category: 'long-khimar',
-  sku: '',
-  stock: 0,
+const initialFormState = {
+    name: '',
+    price: '',
+    category: '',
+    sku: '',
+    stock: '0',
+    description: ''
 };
 
-export const ProductForm: React.FC<ProductFormProps> = ({ product, onClose, onAddProduct, onUpdateProduct }) => {
-  const [formData, setFormData] = useState(initialFormState);
-  
-  useEffect(() => {
-    if (product) {
-        setFormData({
-            name: product.name,
-            price: product.price,
-            originalPrice: product.originalPrice,
-            imageUrl: product.imageUrl,
-            category: product.category,
-            sku: product.sku,
-            stock: product.stock,
-        });
-    } else {
-        setFormData(initialFormState);
+export default function ProductForm({ onSaved }: ProductFormProps) {
+  const [form, setForm] = useState(initialFormState);
+  const [file, setFile] = useState<File | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setFile(e.target.files[0]);
     }
-  }, [product]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    const isNumberField = ['price', 'originalPrice', 'stock'].includes(name);
-    
-    // Allow empty string for number fields to clear them
-    const processedValue = isNumberField
-      ? value === '' ? '' : Number(value)
-      : value;
-
-    setFormData(prev => ({ ...prev, [name]: processedValue }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const finalFormData = {
-        ...formData,
-        originalPrice: formData.originalPrice || undefined
-    };
-    if (product) {
-      onUpdateProduct({ ...product, ...finalFormData });
-    } else {
-      onAddProduct(finalFormData);
+  const uploadImage = async (file: File): Promise<string> => {
+    const ext = file.name.split('.').pop();
+    const fileName = `${Date.now()}.${ext}`;
+    const { data, error } = await supabase.storage
+      .from('product-images')
+      .upload(fileName, file);
+
+    if (error) {
+      throw new Error(`Image upload failed: ${error.message}`);
     }
-    onClose();
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('product-images')
+      .getPublicUrl(data.path);
+      
+    if (!publicUrl) {
+        throw new Error("Could not get public URL for uploaded image.");
+    }
+
+    return publicUrl;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setSaving(true);
+
+    try {
+      let imageUrl: string | null = null;
+      if (file) {
+        imageUrl = await uploadImage(file);
+      }
+
+      const payload = {
+        name: form.name,
+        price: parseFloat(form.price || '0'),
+        category: form.category,
+        sku: form.sku,
+        stock: parseInt(form.stock || '0', 10),
+        description: form.description,
+        image_url: imageUrl,
+        // Default values for fields not in form
+        rating: 0,
+        review_count: 0,
+      };
+
+      const { data, error: insertError } = await supabase
+        .from('products')
+        .insert([payload])
+        .select()
+        .single();
+
+      if (insertError) throw insertError;
+
+      onSaved(data as Product);
+      setForm(initialFormState);
+      setFile(null);
+      // Clear the file input
+      const fileInput = document.getElementById('product-image-file-input') as HTMLInputElement;
+      if (fileInput) fileInput.value = '';
+
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || 'Failed to save product');
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4" onClick={onClose}>
-      <div className="relative bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-        <div className="p-6">
-            <div className="flex justify-between items-center border-b pb-3 mb-5">
-                <h3 className="text-xl font-semibold text-gray-800">{product ? 'পণ্য সম্পাদনা করুন' : 'নতুন পণ্য যোগ করুন'}</h3>
-                <button onClick={onClose} className="text-gray-400 hover:text-gray-600" aria-label="Close modal">
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-            
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">পণ্যের নাম</label>
-                    <input type="text" name="name" id="name" value={formData.name} onChange={handleChange} required />
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">বিক্রয় মূল্য (৳)</label>
-                        <input type="number" name="price" id="price" value={formData.price} onChange={handleChange} required />
-                    </div>
-                    <div>
-                        <label htmlFor="originalPrice" className="block text-sm font-medium text-gray-700 mb-1">আসল মূল্য (৳) (ঐচ্ছিক)</label>
-                        <input type="number" name="originalPrice" id="originalPrice" value={formData.originalPrice || ''} onChange={handleChange} />
-                    </div>
-                </div>
-                <div>
-                    <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700 mb-1">ছবির URL</label>
-                    <input type="text" name="imageUrl" id="imageUrl" value={formData.imageUrl} onChange={handleChange} required />
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">ক্যাটাগরি</label>
-                        <select name="category" id="category" value={formData.category} onChange={handleChange} required>
-                            {categories.filter(c => c.id !== 'all').map(cat => (
-                                <option key={cat.id} value={cat.id}>{cat.name}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div>
-                        <label htmlFor="sku" className="block text-sm font-medium text-gray-700 mb-1">SKU</label>
-                        <input type="text" name="sku" id="sku" value={formData.sku} onChange={handleChange} required />
-                    </div>
-                    <div>
-                        <label htmlFor="stock" className="block text-sm font-medium text-gray-700 mb-1">স্টক পরিমাণ</label>
-                        <input type="number" name="stock" id="stock" value={formData.stock} onChange={handleChange} required />
-                    </div>
-                </div>
-
-                <div className="pt-4 flex justify-end space-x-3 border-t mt-6">
-                    <button type="button" onClick={onClose} className="bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300">বাতিল</button>
-                    <button type="submit" className="bg-brand-green text-white py-2 px-4 rounded-lg font-semibold hover:bg-brand-green-dark transition-all">
-                        {product ? 'আপডেট করুন' : 'পণ্য যোগ করুন'}
-                    </button>
-                </div>
-            </form>
+    <div className="bg-white p-6 rounded-lg shadow-md">
+      <h3 className="text-xl font-bold mb-4">Add New Product</h3>
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+          <strong className="font-bold">Error: </strong>
+          <span className="block sm:inline">{error}</span>
         </div>
-      </div>
+      )}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input
+              type="text"
+              placeholder="Product Name"
+              required
+              value={form.name}
+              onChange={e => setForm({ ...form, name: e.target.value })}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md"
+            />
+            <input
+              type="number"
+              placeholder="Price"
+              required
+              step="0.01"
+              min="0"
+              value={form.price}
+              onChange={e => setForm({ ...form, price: e.target.value })}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md"
+            />
+            <input
+              type="text"
+              placeholder="Category"
+              value={form.category}
+              onChange={e => setForm({ ...form, category: e.target.value })}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md"
+            />
+            <input
+              type="text"
+              placeholder="SKU"
+              value={form.sku}
+              onChange={e => setForm({ ...form, sku: e.target.value })}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md"
+            />
+            <input
+              type="number"
+              placeholder="Stock Quantity"
+              min="0"
+              value={form.stock}
+              onChange={e => setForm({ ...form, stock: e.target.value })}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md"
+            />
+        </div>
+        <textarea
+          placeholder="Product Description"
+          value={form.description}
+          onChange={e => setForm({ ...form, description: e.target.value })}
+          rows={4}
+          className="w-full px-4 py-2 border border-gray-300 rounded-md"
+        />
+        <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+                Product Image
+            </label>
+            <input
+              id="product-image-file-input"
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-brand-cream file:text-brand-green hover:file:bg-green-100"
+            />
+            {file && <p className="text-sm text-gray-500 mt-2">Selected: {file.name}</p>}
+        </div>
+
+        <button type="submit" disabled={saving} className="w-full bg-brand-green text-white py-2 px-4 rounded-md hover:bg-brand-green-dark disabled:opacity-50">
+          {saving ? 'Saving...' : 'Save Product'}
+        </button>
+      </form>
     </div>
   );
-};
+}

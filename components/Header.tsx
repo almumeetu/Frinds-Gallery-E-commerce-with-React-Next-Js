@@ -100,9 +100,7 @@ export const Header: React.FC<HeaderProps> = ({ navigateTo, navigateToShop, cart
                                         <p className="font-semibold text-slate-800">হ্যালো, {currentUser.name.split(' ')[0]}</p>
                                         <p className="text-slate-500 mb-3">{currentUser.email}</p>
                                         <button onClick={() => navigateTo('account')} className="block w-full text-left font-medium text-brand-green hover:underline py-1">আমার অ্যাকাউন্ট</button>
-                                        {currentUser.email === ADMIN_EMAIL && (
-                                            <button onClick={() => navigateTo('admin')} className="block w-full text-left font-medium text-brand-green hover:underline py-1">অ্যাডমিন ড্যাশবোর্ড</button>
-                                        )}
+                                        <button onClick={() => navigateTo('admin')} className="block w-full text-left font-medium text-brand-green hover:underline py-1">অ্যাডমিন ড্যাশবোর্ড</button>
                                         <button onClick={onLogout} className="block w-full text-left font-medium text-red-600 hover:underline py-1 mt-1 border-t pt-2">লগআউট</button>
                                     </>
                                 ) : (
@@ -168,11 +166,9 @@ export const Header: React.FC<HeaderProps> = ({ navigateTo, navigateToShop, cart
                                 <button onClick={() => handleNavClick('account')} className="w-full flex items-center text-left px-3 py-2.5 rounded-md text-sm font-semibold text-slate-700 hover:bg-slate-200">
                                    <UserIcon className="mr-3" /> আমার অ্যাকাউন্ট
                                 </button>
-                                {currentUser.email === ADMIN_EMAIL && (
                                      <button onClick={() => handleNavClick('admin')} className="w-full flex items-center text-left px-3 py-2.5 rounded-md text-sm font-semibold text-slate-700 hover:bg-slate-200">
                                        <Cog6ToothIcon className="mr-3" /> অ্যাডমিন ড্যাশবোর্ড
                                     </button>
-                                )}
                                 <button onClick={() => { onLogout(); setIsMenuOpen(false); }} className="w-full flex items-center text-left px-3 py-2.5 rounded-md text-sm font-semibold text-red-600 hover:bg-red-50">
                                    <ArrowLeftOnRectangleIcon className="mr-3" /> লগআউট
                                 </button>

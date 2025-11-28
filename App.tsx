@@ -189,34 +189,6 @@ const App: React.FC = () => {
   };
 
 
-  // Admin Handlers
-  const handleAddProduct = async (newProductData: Omit<Product, 'id' | 'rating' | 'reviewCount'>) => {
-    const newProduct = await api.addProduct(newProductData);
-    setProducts(prevProducts => [newProduct, ...prevProducts]);
-  };
-
-  const handleUpdateProduct = async (updatedProduct: Product) => {
-    const result = await api.updateProduct(updatedProduct);
-    setProducts(prevProducts =>
-      prevProducts.map(p => (p.id === result.id ? result : p))
-    );
-  };
-
-  const handleDeleteProduct = async (productId: string) => {
-    await api.deleteProduct(productId);
-    setProducts(prevProducts => prevProducts.filter(p => p.id !== productId));
-  };
-  
-  const handleUpdateOrderStatus = async (orderId: string, status: Order['status']) => {
-    const updatedOrder = await api.updateOrderStatus(orderId, status);
-    setOrders(prevOrders =>
-        prevOrders.map(order =>
-            order.id === orderId ? updatedOrder : order
-        )
-    );
-  };
-
-
   const renderPage = () => {
     switch (currentPage) {
       case 'shop':
@@ -230,16 +202,7 @@ const App: React.FC = () => {
       case 'wishlist':
         return <WishlistPage products={products} wishlistProductIds={wishlist} onProductSelect={handleProductSelect} addToCart={addToCart} buyNow={buyNow} toggleWishlist={toggleWishlist} navigateTo={navigateTo} onQuickView={handleQuickView} />;
       case 'admin':
-        return <AdminDashboardPage 
-                  navigateTo={navigateTo} 
-                  products={products}
-                  orders={orders}
-                  customers={customers}
-                  onAddProduct={handleAddProduct}
-                  onUpdateProduct={handleUpdateProduct}
-                  onDeleteProduct={handleDeleteProduct}
-                  onUpdateOrderStatus={handleUpdateOrderStatus}
-                />;
+        return <AdminDashboardPage navigateTo={navigateTo} />;
       case 'utility':
         return <UtilityPage navigateTo={navigateTo} />;
       case 'hotDeals':
