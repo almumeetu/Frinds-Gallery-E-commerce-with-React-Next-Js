@@ -16,10 +16,12 @@ export default defineConfig(({ mode }) => {
         }
       },
       publicDir: 'public',
+      base: '/',
       build: {
         // Optimize build output
         target: 'es2015',
         minify: 'terser',
+        assetsInlineLimit: 0,
         terserOptions: {
           compress: {
             drop_console: true, // Remove console.logs in production
