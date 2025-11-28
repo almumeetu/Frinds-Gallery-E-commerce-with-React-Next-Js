@@ -15,6 +15,7 @@ export default defineConfig(({ mode }) => {
           '@': path.resolve(__dirname, '.'),
         }
       },
+      publicDir: 'public',
       build: {
         // Optimize build output
         target: 'es2015',
