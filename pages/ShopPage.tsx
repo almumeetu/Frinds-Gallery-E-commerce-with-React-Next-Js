@@ -111,10 +111,10 @@ export const ShopPage: React.FC<ShopPageProps> = ({ products, initialCategory, o
 
                         {/* Pagination */}
                         <div className="mt-10 flex justify-center items-center space-x-2">
-                           <button className="px-4 py-2 text-sm font-medium text-slate-500 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 disabled:opacity-50" disabled>&laquo;</button>
-                           <button className="px-4 py-2 text-sm font-medium text-white bg-brand-green border border-brand-green rounded-lg">1</button>
-                           <button className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50">2</button>
-                           <button className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50">3</button>
+                           <button className="px-4 py-2 text-sm font-medium text-slate-500 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 disabled:opacity-50 transition-all" disabled>&laquo;</button>
+                           <button className="px-4 py-2 text-sm font-medium text-white bg-brand-green border border-brand-green rounded-lg transition-all">1</button>
+                           <button className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-all">2</button>
+                           <button className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-all">3</button>
                            <button className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50">&raquo;</button>
                         </div>
                     </main>

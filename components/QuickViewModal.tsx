@@ -56,53 +56,50 @@ export const QuickViewModal: React.FC<QuickViewModalProps> = ({ product, onClose
             <div className="mt-4 text-base text-gray-600">
                 <p>পণ্যের একটি সংক্ষিপ্ত বিবরণ এখানে থাকবে। এটি ব্যবহারকারীকে দ্রুত পণ্য সম্পর্কে ধারণা দেবে।</p>
             </div>
-            {/* Actions */}
+            {/* Quantity Selector */}
             <div className="mt-6">
-                 <div className="flex items-center space-x-4">
-                    <div className="flex items-center">
-                        <label htmlFor="quantity-qv" className="sr-only">পরিমাণ</label>
-                        <div className="flex items-center border border-slate-300 rounded-lg overflow-hidden h-12">
-                            <button
-                            type="button"
-                            onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                            disabled={quantity <= 1}
-                            className="px-4 h-full text-slate-600 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                            aria-label="Decrease quantity"
-                            >
-                            <MinusIcon className="h-4 w-4" />
-                            </button>
-                            <input
-                            id="quantity-qv"
-                            type="number"
-                            value={quantity}
-                            readOnly
-                            className="w-16 h-full text-center text-lg font-semibold text-brand-dark border-l border-r border-slate-300 focus:outline-none bg-white"
-                            aria-live="polite"
-                            />
-                            <button
-                            type="button"
-                            onClick={() => setQuantity(q => Math.min(product.stock, q + 1))}
-                            disabled={quantity >= product.stock}
-                            className="px-4 h-full text-slate-600 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                            aria-label="Increase quantity"
-                            >
-                            <PlusIcon className="h-4 w-4" />
-                            </button>
-                        </div>
+                <label htmlFor="quantity-qv" className="block text-sm font-semibold text-gray-700 mb-2">পরিমাণ</label>
+                <div className="flex items-center border-2 border-gray-400 rounded-lg overflow-hidden w-40 h-14 bg-slate-50 shadow-sm">
+                    <button
+                        type="button"
+                        onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                        disabled={quantity <= 1}
+                        className="px-4 h-full text-gray-800 font-bold hover:bg-slate-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors flex items-center justify-center bg-slate-100"
+                        aria-label="Decrease quantity"
+                    >
+                        <MinusIcon className="h-6 w-6" />
+                    </button>
+                    <div className="flex-1 h-full flex items-center justify-center border-l-2 border-r-2 border-gray-400 bg-white">
+                        <span className="text-2xl font-bold text-gray-900">{quantity}</span>
                     </div>
+                    <button
+                        type="button"
+                        onClick={() => setQuantity(q => Math.min(product.stock, q + 1))}
+                        disabled={quantity >= product.stock}
+                        className="px-4 h-full text-gray-800 font-bold hover:bg-slate-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors flex items-center justify-center bg-slate-100"
+                        aria-label="Increase quantity"
+                    >
+                        <PlusIcon className="h-6 w-6" />
+                    </button>
+                </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="mt-6 space-y-3">
+                <div className="flex items-center gap-3">
                     <button
                         onClick={() => {
                             addToCart(product.id, quantity);
                             onClose();
                         }}
                         disabled={product.stock === 0}
-                        className="flex-1 bg-brand-yellow text-gray-900 py-3 px-6 border border-transparent rounded-md font-bold hover:bg-yellow-400 disabled:bg-gray-300 disabled:cursor-not-allowed h-12 flex items-center justify-center"
-                        >
+                        className="flex-1 bg-brand-yellow text-gray-900 py-3.5 px-6 rounded-lg font-bold hover:bg-yellow-400 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg"
+                    >
                         কার্টে যোগ করুন
                     </button>
                     <button
                         onClick={() => toggleWishlist(product.id)}
-                        className="p-3 border rounded-md hover:bg-gray-100 h-12 w-12 flex items-center justify-center"
+                        className="p-3.5 border-2 border-slate-300 rounded-lg hover:bg-gray-50 hover:border-brand-green transition-all shadow-sm"
                         aria-label="Add to wishlist"
                     >
                         <HeartIcon className={`w-6 h-6 ${isInWishlist ? 'text-red-500' : 'text-gray-500'}`} isFilled={isInWishlist} />
@@ -114,8 +111,8 @@ export const QuickViewModal: React.FC<QuickViewModalProps> = ({ product, onClose
                         onClose();
                     }}
                     disabled={product.stock === 0}
-                    className="w-full mt-4 bg-brand-green text-white py-3 px-8 border border-transparent rounded-md font-bold hover:bg-brand-green-dark disabled:bg-gray-400 disabled:cursor-not-allowed"
-                    >
+                    className="w-full bg-brand-green text-white py-3.5 px-8 rounded-lg font-bold hover:bg-brand-green-dark disabled:bg-gray-400 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg"
+                >
                     এখনই কিনুন
                 </button>
             </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import type { Product } from '../types';
+import { categories } from '../constants';
 
 interface DealOfTheDayProps {
     product: Product;
@@ -58,12 +59,15 @@ const CountdownTimer = () => {
 };
 
 export const DealOfTheDay: React.FC<DealOfTheDayProps> = ({ product, buyNow, navigateToShop }) => {
+    const islamicItemCategory = categories.find(cat => cat.id === 'islamic-item');
+    const dealImageUrl = islamicItemCategory?.imageUrl || product.imageUrl;
+    
     return (
          <section className="bg-emerald-50">
             <div className="w-full mx-auto max-w-8xl px-4 sm:px-6 lg:px-8 py-16">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     <div className="w-full h-96 lg:h-full lg:aspect-[4/3] rounded-xl overflow-hidden group shadow-lg">
-                        <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                        <img src={dealImageUrl} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                     </div>
 
                     <div>
@@ -89,7 +93,7 @@ export const DealOfTheDay: React.FC<DealOfTheDayProps> = ({ product, buyNow, nav
                         </div>
 
                         <div className="mt-8 flex items-center space-x-4">
-                            <button onClick={() => buyNow(product.id, 1)} className="bg-brand-green text-white font-bold py-3 px-8 rounded-lg hover:bg-brand-green-dark transition-transform transform hover:scale-105 text-lg shadow-md">
+                            <button onClick={() => buyNow(product.id, 1)} className="bg-brand-green text-white font-bold py-3 px-8 rounded-lg hover:bg-brand-green-dark transition-all transform hover:scale-105 text-lg shadow-md">
                                 এখনই কিনুন
                             </button>
                         </div>

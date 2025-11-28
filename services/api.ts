@@ -5,13 +5,31 @@ import { OrderStatus } from '../types';
 // --- REAL SUPABASE BACKEND ---
 // All data now comes from Supabase database
 
+// Local product images mapping
+const productImageMap: { [sku: string]: string } = {
+  'FG-LK-001': '/images/products/lehengga-1.webp',
+  'FG-HJ-005': '/images/products/lehengga-2.webp',
+  'FG-IN-012': '/images/products/lehengga-3.webp',
+  'FG-TP-020': '/images/products/lehengga-4.webp',
+  'FG-IS-003': '/images/products/lehengga-5.webp',
+  'FG-LK-002': '/images/products/lehengga-6.webp',
+  'FG-HJ-008': '/images/products/modern-dress.webp',
+  'FG-IN-015': '/images/products/modern-dress-2.webp',
+  'FG-TP-022': '/images/products/threepic-1.webp',
+  'FG-IS-004': '/images/products/threepics-3.webp',
+  'FG-EX-001': '/images/products/thereepices-2.webp',
+  'FG-EX-002': '/images/products/thereepices-4.webp',
+  'FG-EX-003': '/images/products/thereepices-5.webp',
+  'FG-EX-004': '/images/products/thereepics-4.webp',
+};
+
 // Helper to map database columns to frontend types
 const mapProduct = (data: any): Product => ({
   id: data.id,
   name: data.name,
   price: Number(data.price),
   originalPrice: data.original_price ? Number(data.original_price) : undefined,
-  imageUrl: data.image_url,
+  imageUrl: productImageMap[data.sku] || data.image_url, // Use local image if mapped, else fallback
   category: data.category,
   sku: data.sku,
   stock: data.stock,

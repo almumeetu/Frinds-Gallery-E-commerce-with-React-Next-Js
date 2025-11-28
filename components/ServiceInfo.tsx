@@ -14,7 +14,7 @@ export const ServiceInfo: React.FC = () => {
             <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     {services.map((service) => (
-                        <div key={service.title} className="flex items-center">
+                        <div key={service.title} className="flex items-center m-auto">
                             <div className="text-4xl mr-4 text-brand-green">{service.icon}</div>
                             <div>
                                 <h3 className="font-semibold text-gray-800">{service.title}</h3>

@@ -59,7 +59,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ navigateTo }) => {
                                     <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">বার্তা</label>
                                     <textarea id="message" rows={4}></textarea>
                                 </div>
-                                <button type="submit" className="w-full bg-brand-green text-white py-2.5 rounded-lg font-semibold hover:bg-brand-green-dark">পাঠিয়ে দিন</button>
+                                <button type="submit" className="w-full bg-brand-green text-white py-2.5 rounded-lg font-semibold hover:bg-brand-green-dark transition-all">পাঠিয়ে দিন</button>
                             </form>
                         </div>
                     </div>

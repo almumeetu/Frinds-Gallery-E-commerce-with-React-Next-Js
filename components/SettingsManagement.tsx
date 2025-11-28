@@ -78,7 +78,7 @@ export const SettingsManagement: React.FC = () => {
                 
                 <div className="flex justify-end items-center space-x-4">
                     {isSaved && <p className="text-green-600 font-semibold">সফলভাবে সেভ হয়েছে!</p>}
-                    <button type="submit" className="bg-brand-green text-white py-2 px-6 rounded-lg font-semibold hover:bg-brand-green-dark transition-colors">
+                    <button type="submit" className="bg-brand-green text-white py-2 px-6 rounded-lg font-semibold hover:bg-brand-green-dark transition-all">
                         পরিবর্তন সেভ করুন
                     </button>
                 </div>

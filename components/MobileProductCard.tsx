@@ -52,7 +52,9 @@ export const MobileProductCard: React.FC<MobileProductCardProps> = ({ product, o
         <img 
           className="w-full h-48 sm:h-64 object-cover transition-transform duration-300" 
           src={product.imageUrl} 
-          alt={product.name} 
+          alt={product.name}
+          loading="lazy"
+          decoding="async"
         />
 
         {discount > 0 && (
@@ -107,7 +109,7 @@ export const MobileProductCard: React.FC<MobileProductCardProps> = ({ product, o
                   addToCart(product.id, 1);
               }}
               disabled={product.stock === 0}
-              className="w-full flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-slate-100 text-brand-dark rounded-lg hover:bg-brand-dark hover:text-white transition-colors disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed font-semibold text-xs sm:text-sm"
+              className="w-full flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-slate-100 text-brand-dark rounded-lg hover:bg-brand-dark hover:text-black transition-all disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed font-semibold text-xs sm:text-sm border border-slate-200"
               aria-label="Add to cart"
             >
               <ShoppingCartIcon className="h-4 w-4 flex-shrink-0" />
@@ -120,7 +122,7 @@ export const MobileProductCard: React.FC<MobileProductCardProps> = ({ product, o
                   buyNow(product.id, 1);
               }}
               disabled={product.stock === 0}
-              className="w-full flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-brand-green text-white rounded-lg hover:bg-brand-dark transition-colors disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed font-semibold text-xs sm:text-sm"
+              className="w-full flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-brand-green text-white rounded-lg hover:bg-brand-green-dark transition-all disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed font-semibold text-xs sm:text-sm"
               aria-label="Buy now"
             >
               <span>এখনই কিনুন</span>

@@ -16,12 +16,12 @@ export const upazilas: { [key: string]: string[] } = {
 };
 
 export const categories: Category[] = [
-    { id: 'all', name: 'সকল'},
-    { id: 'long-khimar', name: 'লং খিমার কালেকশন', imageUrl: 'https://i.ibb.co/P9yF5s1/khimar2.jpg' },
-    { id: 'three-piece', name: 'থ্রি-পিস', imageUrl: 'https://i.ibb.co/fDbP2d6/three-piece.jpg' },
-    { id: 'hijab', name: 'হিজাব কালেকশন', imageUrl: 'https://i.ibb.co/Kz9V31g/hijab.jpg' },
-    { id: 'innar-collection', name: 'ইনার কালেকশন', imageUrl: 'https://i.ibb.co/Yd4Bv3D/bra.jpg' },
-    { id: 'islamic-item', name: 'ইসলামিক আইটেম', imageUrl: 'https://i.ibb.co/XzB6cK7/gloves.jpg' },
+    { id: 'all', name: 'সকল', imageUrl: '' },
+    { id: 'long-khimar', name: 'লং খিমার কালেকশন', imageUrl: '/images/category/category-image (1).png' },
+    { id: 'three-piece', name: 'থ্রি-পিস', imageUrl: '/images/category/category-image (2).png' },
+    { id: 'hijab', name: 'হিজাব কালেকশন', imageUrl: '/images/category/category-image (3).png' },
+    { id: 'innar-collection', name: 'ইনার কালেকশন', imageUrl: '/images/category/category-image (4).png' },
+    { id: 'islamic-item', name: 'ইসলামিক আইটেম', imageUrl: '/images/category/category-image (5).png' },
 ];
 
 export const mockProductReviews: ProductReview[] = [
@@ -50,5 +50,6 @@ export const brands = [
 
 export const paymentMethods = [
     { id: 'cod', name: 'ক্যাশ অন ডেলিভারি', icon: 'https://cdn-icons-png.flaticon.com/512/4108/4108042.png' },
-    { id: 'bkash', name: 'বিকাশ', icon: 'https://seeklogo.com/images/B/bkash-logo-835789094F-seeklogo.com.png' },
+    { id: 'bkash', name: 'বিকাশ', icon: '/images/logo/bkash.png' },
+    { id: 'nagad', name: 'নগদ', icon: '/images/logo/nagad.png' },
 ];

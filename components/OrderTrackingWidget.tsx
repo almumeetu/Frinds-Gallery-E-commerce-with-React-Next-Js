@@ -43,7 +43,7 @@ export const OrderTrackingWidget: React.FC = () => {
                 <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full sm:w-auto bg-brand-green text-white py-2.5 px-6 rounded-lg font-semibold hover:bg-brand-green-dark disabled:bg-gray-400 transition-colors"
+                    className="w-full sm:w-auto bg-brand-green text-white py-2.5 px-6 rounded-lg font-semibold hover:bg-brand-green-dark disabled:bg-gray-400 transition-all"
                 >
                     {isLoading ? 'অনুসন্ধান...' : 'ট্র্যাক করুন'}
                 </button>

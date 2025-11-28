@@ -115,7 +115,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ product, onClose, onAd
 
                 <div className="pt-4 flex justify-end space-x-3 border-t mt-6">
                     <button type="button" onClick={onClose} className="bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300">বাতিল</button>
-                    <button type="submit" className="bg-brand-green text-white py-2 px-4 rounded-lg font-semibold hover:bg-brand-green-dark">
+                    <button type="submit" className="bg-brand-green text-white py-2 px-4 rounded-lg font-semibold hover:bg-brand-green-dark transition-all">
                         {product ? 'আপডেট করুন' : 'পণ্য যোগ করুন'}
                     </button>
                 </div>

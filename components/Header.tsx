@@ -108,7 +108,7 @@ export const Header: React.FC<HeaderProps> = ({ navigateTo, navigateToShop, cart
                                 ) : (
                                     <>
                                         <p className="font-semibold text-slate-800 mb-2">ফ্রেন্ডস গ্যালারিতে স্বাগতম</p>
-                                        <button onClick={() => navigateTo('account')} className="w-full bg-brand-green text-white py-2 rounded-md font-semibold hover:bg-brand-green-dark">লগইন / রেজিস্টার</button>
+                                        <button onClick={() => navigateTo('account')} className="w-full bg-brand-green text-white py-2 rounded-md font-semibold hover:bg-brand-green-dark transition-all">লগইন / রেজিস্টার</button>
                                     </>
                                 )}
                             </div>
@@ -178,7 +178,7 @@ export const Header: React.FC<HeaderProps> = ({ navigateTo, navigateToShop, cart
                                 </button>
                              </div>
                          ) : (
-                            <button onClick={() => handleNavClick('account')} className="w-full bg-brand-green text-white py-2.5 rounded-lg font-semibold hover:bg-brand-green-dark">
+                            <button onClick={() => handleNavClick('account')} className="w-full bg-brand-green text-white py-2.5 rounded-lg font-semibold hover:bg-brand-green-dark transition-all">
                                 লগইন / রেজিস্টার
                             </button>
                          )}

@@ -27,7 +27,7 @@ const StyleGuide = () => (
     <section className="w-full max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
             <div className="relative rounded-xl overflow-hidden h-96 group">
-                <img src="https://i.ibb.co/fDbP2d6/three-piece.jpg" alt="Casual Wear" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"/>
+                <img src="/images/banner/banner-2.webp" alt="Casual Wear" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"/>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                 <div className="absolute bottom-0 left-0 text-white p-8">
                     <h3 className="text-3xl font-bold">আরামদায়ক থ্রি-পিস</h3>
@@ -36,7 +36,7 @@ const StyleGuide = () => (
                 </div>
             </div>
             <div className="relative rounded-xl overflow-hidden h-96 group">
-                <img src="https://i.ibb.co/Kz9V31g/hijab.jpg" alt="Hijab Collection" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"/>
+                <img src="/images/banner/banner-3.webp" alt="Hijab Collection" className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"/>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                 <div className="absolute bottom-0 left-0 text-white p-8">
                     <h3 className="text-3xl font-bold">গর্জিয়াস হিজাব</h3>

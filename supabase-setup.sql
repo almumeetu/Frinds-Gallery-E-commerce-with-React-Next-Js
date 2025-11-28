@@ -98,44 +98,76 @@ CREATE POLICY "Admins can do everything on customers" ON customers FOR ALL USING
 
 -- Insert your products (only if they don't exist)
 INSERT INTO products (name, price, original_price, image_url, category, sku, stock, rating, review_count)
-SELECT 'জিলবাব লং খিমার', 990, 1200, 'https://i.ibb.co/6r1qGz8/khimar.jpg', 'long-khimar', 'FG-LK-001', 15, 4.5, 65
+SELECT 'জিলবাব লং খিমার', 990, 1200, '/images/products/lehengga-1.webp', 'long-khimar', 'FG-LK-001', 15, 4.5, 65
 WHERE NOT EXISTS (SELECT 1 FROM products WHERE sku = 'FG-LK-001');
 
 INSERT INTO products (name, price, original_price, image_url, category, sku, stock, rating, review_count)
-SELECT 'প্রিমিয়াম জর্জেট হিজাব', 699, 999, 'https://i.ibb.co/Kz9V31g/hijab.jpg', 'hijab', 'FG-HJ-005', 25, 4.8, 120
+SELECT 'প্রিমিয়াম জর্জেট হিজাব', 699, 999, '/images/products/lehengga-2.webp', 'hijab', 'FG-HJ-005', 25, 4.8, 120
 WHERE NOT EXISTS (SELECT 1 FROM products WHERE sku = 'FG-HJ-005');
 
 INSERT INTO products (name, price, original_price, image_url, category, sku, stock, rating, review_count)
-SELECT 'কমফোর্ট ফিট ফুল কভারেজ ব্রা', 750, NULL, 'https://i.ibb.co/Yd4Bv3D/bra.jpg', 'innar-collection', 'FG-IN-012', 30, 4.2, 40
+SELECT 'কমফোর্ট ফিট ফুল কভারেজ ব্রা', 750, NULL, '/images/products/lehengga-3.webp', 'innar-collection', 'FG-IN-012', 30, 4.2, 40
 WHERE NOT EXISTS (SELECT 1 FROM products WHERE sku = 'FG-IN-012');
 
 INSERT INTO products (name, price, original_price, image_url, category, sku, stock, rating, review_count)
-SELECT 'স্টাইলিশ কটন থ্রি-পিস', 2250, NULL, 'https://i.ibb.co/fDbP2d6/three-piece.jpg', 'three-piece', 'FG-TP-020', 10, 4.9, 88
+SELECT 'স্টাইলিশ কটন থ্রি-পিস', 2250, NULL, '/images/products/lehengga-4.webp', 'three-piece', 'FG-TP-020', 10, 4.9, 88
 WHERE NOT EXISTS (SELECT 1 FROM products WHERE sku = 'FG-TP-020');
 
 INSERT INTO products (name, price, original_price, image_url, category, sku, stock, rating, review_count)
-SELECT 'প্রিমিয়াম সফট হ্যান্ড গ্লাভস (কালো)', 150, 200, 'https://i.ibb.co/XzB6cK7/gloves.jpg', 'islamic-item', 'FG-IS-003', 50, 4.0, 32
+SELECT 'প্রিমিয়াম সফট হ্যান্ড গ্লাভস (কালো)', 150, 200, '/images/products/lehengga-5.webp', 'islamic-item', 'FG-IS-003', 50, 4.0, 32
 WHERE NOT EXISTS (SELECT 1 FROM products WHERE sku = 'FG-IS-003');
 
 INSERT INTO products (name, price, original_price, image_url, category, sku, stock, rating, review_count)
-SELECT 'আরবিয়ান চেরি লং খিমার', 1150, 1400, 'https://i.ibb.co/P9yF5s1/khimar2.jpg', 'long-khimar', 'FG-LK-002', 12, 4.6, 75
+SELECT 'আরবিয়ান চেরি লং খিমার', 1150, 1400, '/images/products/lehengga-6.webp', 'long-khimar', 'FG-LK-002', 12, 4.6, 75
 WHERE NOT EXISTS (SELECT 1 FROM products WHERE sku = 'FG-LK-002');
 
 INSERT INTO products (name, price, original_price, image_url, category, sku, stock, rating, review_count)
-SELECT 'ইন্দোনেশিয়ান প্রিমিয়াম হিজাব', 799, NULL, 'https://i.ibb.co/gZ7k2tJ/hijab2.jpg', 'hijab', 'FG-HJ-008', 20, 4.7, 95
+SELECT 'ইন্দোনেশিয়ান প্রিমিয়াম হিজাব', 799, NULL, '/images/products/modern-dress.webp', 'hijab', 'FG-HJ-008', 20, 4.7, 95
 WHERE NOT EXISTS (SELECT 1 FROM products WHERE sku = 'FG-HJ-008');
 
 INSERT INTO products (name, price, original_price, image_url, category, sku, stock, rating, review_count)
-SELECT 'সিমলেস কমফোর্ট ব্রা', 850, NULL, 'https://i.ibb.co/Qv6Y0yR/bra2.jpg', 'innar-collection', 'FG-IN-015', 0, 4.3, 50
+SELECT 'সিমলেস কমফোর্ট ব্রা', 850, NULL, '/images/products/modern-dress-2.webp', 'innar-collection', 'FG-IN-015', 0, 4.3, 50
 WHERE NOT EXISTS (SELECT 1 FROM products WHERE sku = 'FG-IN-015');
 
 INSERT INTO products (name, price, original_price, image_url, category, sku, stock, rating, review_count)
-SELECT 'ডিজিটাল প্রিন্ট কটন থ্রি-পিস', 2400, 2800, 'https://i.ibb.co/L5h5q6p/three-piece2.jpg', 'three-piece', 'FG-TP-022', 8, 5.0, 110
+SELECT 'ডিজিটাল প্রিন্ট কটন থ্রি-পিস', 2400, 2800, '/images/products/threepic-1.webp', 'three-piece', 'FG-TP-022', 8, 5.0, 110
 WHERE NOT EXISTS (SELECT 1 FROM products WHERE sku = 'FG-TP-022');
 
 INSERT INTO products (name, price, original_price, image_url, category, sku, stock, rating, review_count)
-SELECT 'ইসলামিক মোজা (কালো)', 90, 150, 'https://i.ibb.co/mH6qgG3/socks.jpg', 'islamic-item', 'FG-IS-004', 40, 3.9, 25
+SELECT 'ইসলামিক মোজা (কালো)', 90, 150, '/images/products/threepics-3.webp', 'islamic-item', 'FG-IS-004', 40, 3.9, 25
 WHERE NOT EXISTS (SELECT 1 FROM products WHERE sku = 'FG-IS-004');
+
+INSERT INTO products (name, price, original_price, image_url, category, sku, stock, rating, review_count)
+SELECT 'এক্সট্রা প্রোডাক্ট 1', 1000, NULL, '/images/products/thereepices-2.webp', 'three-piece', 'FG-EX-001', 5, 4.0, 10
+WHERE NOT EXISTS (SELECT 1 FROM products WHERE sku = 'FG-EX-001');
+
+INSERT INTO products (name, price, original_price, image_url, category, sku, stock, rating, review_count)
+SELECT 'এক্সট্রা প্রোডাক্ট 2', 1100, NULL, '/images/products/thereepices-4.webp', 'three-piece', 'FG-EX-002', 5, 4.0, 10
+WHERE NOT EXISTS (SELECT 1 FROM products WHERE sku = 'FG-EX-002');
+
+INSERT INTO products (name, price, original_price, image_url, category, sku, stock, rating, review_count)
+SELECT 'এক্সট্রা প্রোডাক্ট 3', 1200, NULL, '/images/products/thereepices-5.webp', 'three-piece', 'FG-EX-003', 5, 4.0, 10
+WHERE NOT EXISTS (SELECT 1 FROM products WHERE sku = 'FG-EX-003');
+
+INSERT INTO products (name, price, original_price, image_url, category, sku, stock, rating, review_count)
+SELECT 'এক্সট্রা প্রোডাক্ট 4', 1300, NULL, '/images/products/thereepics-4.webp', 'three-piece', 'FG-EX-004', 5, 4.0, 10
+WHERE NOT EXISTS (SELECT 1 FROM products WHERE sku = 'FG-EX-004');
+
+-- Update existing products to use local images
+UPDATE products SET image_url = '/images/products/lehengga-1.webp' WHERE sku = 'FG-LK-001';
+UPDATE products SET image_url = '/images/products/lehengga-2.webp' WHERE sku = 'FG-HJ-005';
+UPDATE products SET image_url = '/images/products/lehengga-3.webp' WHERE sku = 'FG-IN-012';
+UPDATE products SET image_url = '/images/products/lehengga-4.webp' WHERE sku = 'FG-TP-020';
+UPDATE products SET image_url = '/images/products/lehengga-5.webp' WHERE sku = 'FG-IS-003';
+UPDATE products SET image_url = '/images/products/lehengga-6.webp' WHERE sku = 'FG-LK-002';
+UPDATE products SET image_url = '/images/products/modern-dress.webp' WHERE sku = 'FG-HJ-008';
+UPDATE products SET image_url = '/images/products/modern-dress-2.webp' WHERE sku = 'FG-IN-015';
+UPDATE products SET image_url = '/images/products/threepic-1.webp' WHERE sku = 'FG-TP-022';
+UPDATE products SET image_url = '/images/products/threepics-3.webp' WHERE sku = 'FG-IS-004';
+UPDATE products SET image_url = '/images/products/thereepices-2.webp' WHERE sku = 'FG-EX-001';
+UPDATE products SET image_url = '/images/products/thereepices-4.webp' WHERE sku = 'FG-EX-002';
+UPDATE products SET image_url = '/images/products/thereepices-5.webp' WHERE sku = 'FG-EX-003';
+UPDATE products SET image_url = '/images/products/thereepics-4.webp' WHERE sku = 'FG-EX-004';
 
 -- Success message
 SELECT 'Database setup complete! Found ' || COUNT(*) || ' products.' as message FROM products;

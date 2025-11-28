@@ -23,7 +23,7 @@ export const FloatingCart: React.FC<FloatingCartProps> = ({ cart, products, navi
   return (
     <div 
         onClick={() => navigateTo('checkout')}
-        className="fixed right-0 top-1/2 -translate-y-1/2 bg-brand-green text-white w-24 h-24 rounded-l-lg shadow-xl flex flex-col items-center justify-center cursor-pointer z-30 space-y-1 p-2 text-center transform hover:scale-105 transition-transform"
+        className="fixed right-0 top-1/2 -translate-y-1/2 bg-brand-green text-white w-24 h-24 rounded-l-lg shadow-xl flex flex-col items-center justify-center cursor-pointer z-30 space-y-1 p-2 text-center transform hover:scale-105 transition-all"
     >
       <ShoppingCartIcon />
       <div className="text-sm font-bold">{itemCount} আইটেম</div>

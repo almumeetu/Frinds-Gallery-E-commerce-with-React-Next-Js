@@ -12,7 +12,7 @@ export const HeroGallery: React.FC<HeroGalleryProps> = ({ navigateTo }) => {
                 <div className="absolute inset-0">
                     <img 
                         className="w-full h-full object-cover object-center" 
-                        src="https://i.ibb.co/6r1qGz8/khimar.jpg" 
+                        src="/images/banner/banner.webp" 
                         alt="Fashionable clothing banner" 
                     />
                     <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent"></div>

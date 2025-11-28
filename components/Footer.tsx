@@ -72,7 +72,7 @@ export const Footer: React.FC<FooterProps> = ({ navigateTo, navigateToShop }) =>
                         <h4 className="text-sm sm:text-base font-semibold text-brand-dark pt-3 sm:pt-4 mt-3 sm:mt-4 border-t">অফার এবং আপডেটের জন্য সাইন আপ করুন</h4>
                         <form className="flex mt-2 gap-2">
                            <input type="email" placeholder="আপনার ইমেইল দিন" className="flex-1 rounded-lg text-xs sm:text-sm px-3 py-2" />
-                           <button className="bg-brand-green text-white px-3 sm:px-4 rounded-lg text-xs sm:text-sm font-semibold hover:bg-brand-green-dark transition-colors whitespace-nowrap">সাবস্ক্রাইব</button>
+                           <button className="bg-brand-green text-white px-3 sm:px-4 rounded-lg text-xs sm:text-sm font-semibold hover:bg-brand-green-dark transition-all whitespace-nowrap">সাবস্ক্রাইব</button>
                         </form>
                     </div>
                 </div>
@@ -82,8 +82,8 @@ export const Footer: React.FC<FooterProps> = ({ navigateTo, navigateToShop }) =>
                     <p className="text-slate-500">&copy; ২০২৪ ফ্রেন্ডস গ্যালারি। সর্বস্বত্ব সংরক্ষিত।</p>
                     <div className="flex space-x-3 mt-4 sm:mt-0 items-center">
                         <span className="text-slate-500 hidden sm:inline text-xs">আমরা গ্রহণ করি:</span>
-                        <img src="https://seeklogo.com/images/B/bkash-logo-835789094F-seeklogo.com.png" alt="bKash" className="h-7 object-contain" />
-                        <img src="https://seeklogo.com/images/N/nagad-logo-7A70CCFB0D-seeklogo.com.png" alt="Nagad" className="h-7 object-contain" />
+                        <img src="/images/logo/bkash.png" alt="bKash" className="h-7 object-contain" />
+                        <img src="/images/logo/nagad.png" alt="Nagad" className="h-7 object-contain" />
                         <img src="https://cdn-icons-png.flaticon.com/512/4108/4108042.png" alt="Cash on Delivery" className="h-7 object-contain" />
                     </div>
                 </div>

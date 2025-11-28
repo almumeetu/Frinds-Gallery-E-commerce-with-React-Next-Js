@@ -181,7 +181,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ cart, products, upda
                  )}
             </div>
             <div className="mt-6">
-                <button type="submit" disabled={isSubmitting || cart.length === 0} className="w-full bg-brand-green text-white py-3 rounded-lg text-lg font-bold hover:bg-brand-green-dark disabled:bg-slate-400 disabled:cursor-not-allowed transition-transform transform hover:scale-105">
+                <button type="submit" disabled={isSubmitting || cart.length === 0} className="w-full bg-brand-green text-white py-3 rounded-lg text-lg font-bold hover:bg-brand-green-dark disabled:bg-slate-400 disabled:cursor-not-allowed transition-all">
                     {isSubmitting ? 'প্রসেসিং...' : `অর্ডার কনফার্ম করুন`}
                 </button>
             </div>

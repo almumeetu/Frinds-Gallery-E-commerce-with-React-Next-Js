@@ -128,7 +128,7 @@ export const ProductReviews: React.FC<ProductReviewsProps> = ({ productId, revie
                   <label htmlFor="comment" className="block text-sm font-medium text-gray-700 mb-1">আপনার মন্তব্য *</label>
                   <textarea id="comment" value={comment} onChange={(e) => setComment(e.target.value)} required rows={4}></textarea>
                 </div>
-                <button type="submit" className="w-full bg-brand-green text-white py-2.5 rounded-lg font-semibold hover:bg-brand-green-dark transition-colors">
+                <button type="submit" className="w-full bg-brand-green text-white py-2.5 rounded-lg font-semibold hover:bg-brand-green-dark transition-all">
                   মতামত জমা দিন
                 </button>
               </form>

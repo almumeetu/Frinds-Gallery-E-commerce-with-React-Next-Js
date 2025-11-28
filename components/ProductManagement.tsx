@@ -34,7 +34,7 @@ export const ProductManagement: React.FC<ProductManagementProps> = ({ products, 
                 <h2 className="text-xl font-semibold text-gray-800">পণ্য ম্যানেজমেন্ট</h2>
                 <button
                     onClick={() => handleOpenForm()}
-                    className="bg-brand-green text-white py-2 px-4 rounded-md font-semibold hover:bg-brand-green-dark transition-colors"
+                    className="bg-brand-green text-white py-2 px-4 rounded-md font-semibold hover:bg-brand-green-dark transition-all"
                 >
                     + নতুন পণ্য যোগ করুন
                 </button>
