@@ -1,5 +1,6 @@
 import React from 'react';
 import { HeroGallery } from '../components/HeroGallery';
+import { DiscountMarquee } from '../components/DiscountMarquee';
 import { ProductsGrid } from '../components/ProductsGrid';
 import { ProductCarousel } from '../components/ProductCarousel';
 import { FeatureCards } from '../components/FeatureCards';
@@ -57,6 +58,8 @@ export const HomePage: React.FC<HomePageProps> = ({ products, navigateTo, naviga
     return (
         <div className="space-y-16 md:space-y-28 pb-16 bg-brand-cream">
             <HeroGallery navigateTo={navigateTo} />
+            
+            <DiscountMarquee />
             
             <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
                 <FeatureCards />
