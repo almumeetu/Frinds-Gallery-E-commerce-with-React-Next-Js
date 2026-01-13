@@ -61,11 +61,9 @@ const PRODUCTS_QUERY = `
                 id
                 content
                 date
-                ... on Review {
-                   author {
-                    node {
-                      name
-                    }
+                author {
+                  node {
+                    name
                   }
                 }
               }
@@ -161,11 +159,9 @@ const PRODUCT_BY_SLUG_QUERY = `
             id
             content
             date
-            ... on Review {
-              author {
-                node {
-                  name
-                }
+            author {
+              node {
+                name
               }
             }
           }
@@ -432,11 +428,14 @@ export const wordpressProductService = {
             edges {
               node {
                 id
-                title
                 content
                 rating
-                reviewer
                 date
+                author {
+                  node {
+                     name
+                  }
+                }
               }
             }
           }
