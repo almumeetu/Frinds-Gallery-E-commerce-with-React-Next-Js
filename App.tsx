@@ -21,7 +21,8 @@ import { ReturnsPage } from './pages/ReturnsPage';
 import { TermsPage } from './pages/TermsPage';
 import { QuickViewModal } from './components/QuickViewModal';
 import { MobileBottomNav } from './components/MobileBottomNav';
-import type { Product, CartItem, OrderDetails, Order, Customer, OrderItem } from './types';
+import { runAllTests } from './services/wordpressTest';
+import type { Product, Category, CartItem, OrderDetails, Order, Customer, OrderItem } from './types';
 import * as api from './services/api';
 
 
@@ -29,6 +30,7 @@ export type Page = 'home' | 'shop' | 'productDetail' | 'checkout' | 'orderSucces
 
 const App: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -46,17 +48,31 @@ const App: React.FC = () => {
     const loadInitialData = async () => {
         try {
             setIsLoading(true);
-            const [productsData, ordersData, customersData] = await Promise.all([
-                api.getProducts(),
-                api.getOrders(),
-                api.getCustomers(),
+            
+            // Test WordPress GraphQL connection on startup (non-blocking) - Only in dev mode
+            if (import.meta.env.DEV) {
+              runAllTests().catch(err => console.warn('WordPress test failed:', err));
+            }
+            
+            // Fetch data independently so one failure doesn't break everything
+            const fetchProducts = api.getProducts().catch(e => { console.error('Products failed:', e); return []; });
+            const fetchCategories = api.getCategories().catch(e => { console.error('Categories failed:', e); return []; });
+            const fetchOrders = api.getOrders().catch(e => { console.error('Orders failed:', e); return []; });
+            const fetchCustomers = api.getCustomers().catch(e => { console.error('Customers failed:', e); return []; });
+
+            const [productsData, categoriesData, ordersData, customersData] = await Promise.all([
+                fetchProducts,
+                fetchCategories,
+                fetchOrders,
+                fetchCustomers,
             ]);
-            setProducts(productsData);
-            setOrders(ordersData);
-            setCustomers(customersData);
+
+            setProducts(productsData || []);
+            setCategories(categoriesData || []);
+            setOrders(ordersData || []);
+            setCustomers(customersData || []);
         } catch (error) {
             console.error("Failed to load initial data", error);
-            // Optionally set an error state to show a message to the user
         } finally {
             setIsLoading(false);
         }
@@ -192,9 +208,9 @@ const App: React.FC = () => {
   const renderPage = () => {
     switch (currentPage) {
       case 'shop':
-        return <ShopPage products={products} initialCategory={initialCategory} onProductSelect={handleProductSelect} addToCart={addToCart} buyNow={buyNow} wishlist={wishlist} toggleWishlist={toggleWishlist} onQuickView={handleQuickView} navigateTo={navigateTo} navigateToShop={navigateToShop} />;
+        return <ShopPage products={products} categories={categories} initialCategory={initialCategory} onProductSelect={handleProductSelect} addToCart={addToCart} buyNow={buyNow} wishlist={wishlist} toggleWishlist={toggleWishlist} onQuickView={handleQuickView} navigateTo={navigateTo} navigateToShop={navigateToShop} />;
       case 'productDetail':
-        return selectedProduct ? <ProductDetailPage product={selectedProduct} allProducts={products} onProductSelect={handleProductSelect} addToCart={addToCart} buyNow={buyNow} wishlist={wishlist} toggleWishlist={toggleWishlist} onQuickView={handleQuickView} navigateTo={navigateTo} navigateToShop={navigateToShop} /> : <HomePage products={products} navigateTo={navigateTo} navigateToShop={navigateToShop} onProductSelect={handleProductSelect} wishlist={wishlist} toggleWishlist={toggleWishlist} addToCart={addToCart} buyNow={buyNow} onQuickView={handleQuickView} />;
+        return selectedProduct ? <ProductDetailPage product={selectedProduct} allProducts={products} categories={categories} onProductSelect={handleProductSelect} addToCart={addToCart} buyNow={buyNow} wishlist={wishlist} toggleWishlist={toggleWishlist} onQuickView={handleQuickView} navigateTo={navigateTo} navigateToShop={navigateToShop} /> : <HomePage products={products} categories={categories} navigateTo={navigateTo} navigateToShop={navigateToShop} onProductSelect={handleProductSelect} wishlist={wishlist} toggleWishlist={toggleWishlist} addToCart={addToCart} buyNow={buyNow} onQuickView={handleQuickView} />;
       case 'checkout':
         return <CheckoutPage cart={cart} products={products} updateCartQuantity={updateCartQuantity} removeFromCart={removeFromCart} onPlaceOrder={handlePlaceOrder} navigateTo={navigateTo} currentUser={currentUser} />;
       case 'orderSuccess':
@@ -221,7 +237,7 @@ const App: React.FC = () => {
         return <TermsPage navigateTo={navigateTo} />;
       case 'home':
       default:
-        return <HomePage products={products} navigateTo={navigateTo} navigateToShop={navigateToShop} onProductSelect={handleProductSelect} wishlist={wishlist} toggleWishlist={toggleWishlist} addToCart={addToCart} buyNow={buyNow} onQuickView={handleQuickView} />;
+        return <HomePage products={products} categories={categories} navigateTo={navigateTo} navigateToShop={navigateToShop} onProductSelect={handleProductSelect} wishlist={wishlist} toggleWishlist={toggleWishlist} addToCart={addToCart} buyNow={buyNow} onQuickView={handleQuickView} />;
     }
   };
   

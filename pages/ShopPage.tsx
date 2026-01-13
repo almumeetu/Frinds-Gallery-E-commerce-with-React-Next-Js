@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { ProductsGrid } from '../components/ProductsGrid';
 import { SidebarFilters } from '../components/SidebarFilters';
 import { Breadcrumbs } from '../components/Breadcrumbs';
-import { categories } from '../constants';
-import type { Product } from '../types';
+import type { Product, Category } from '../types';
 import type { Page } from '../App';
 
 // FIX: Defined the missing ShopPageProps interface.
 interface ShopPageProps {
     products: Product[];
+    categories: Category[]; // Add categories prop
     initialCategory: string;
     onProductSelect: (product: Product) => void;
     addToCart: (productId: string, quantity: number) => void;
@@ -20,7 +20,7 @@ interface ShopPageProps {
     navigateToShop: (categoryId?: string) => void;
 }
 
-export const ShopPage: React.FC<ShopPageProps> = ({ products, initialCategory, onProductSelect, addToCart, buyNow, wishlist, toggleWishlist, onQuickView, navigateTo, navigateToShop }) => {
+export const ShopPage: React.FC<ShopPageProps> = ({ products, categories, initialCategory, onProductSelect, addToCart, buyNow, wishlist, toggleWishlist, onQuickView, navigateTo, navigateToShop }) => {
     const [selectedCategory, setSelectedCategory] = useState(initialCategory);
     const [priceRange, setPriceRange] = useState({ min: 0, max: 10000 });
     const [availability, setAvailability] = useState('all'); // 'all', 'inStock', 'outOfStock'

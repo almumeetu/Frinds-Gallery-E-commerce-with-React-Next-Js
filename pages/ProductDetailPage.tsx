@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import type { Product, ProductReview } from '../types';
+import type { Product, ProductReview, Category } from '../types';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import { ProductCarousel } from '../components/ProductCarousel';
-import { categories, mockProductReviews } from '../constants';
+import { mockProductReviews } from '../constants';
 import type { Page } from '../App';
 import { ProductReviews } from '../components/ProductReviews';
 import { HeartIcon, PlusIcon, MinusIcon } from '../components/icons';
@@ -10,6 +10,7 @@ import { HeartIcon, PlusIcon, MinusIcon } from '../components/icons';
 interface ProductDetailPageProps {
   product: Product;
   allProducts: Product[];
+  categories: Category[]; // Add categories prop
   addToCart: (productId: string, quantity: number) => void;
   buyNow: (productId: string, quantity: number) => void;
   wishlist: string[];
@@ -20,7 +21,7 @@ interface ProductDetailPageProps {
   navigateToShop: (categoryId: string) => void;
 }
 
-export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product, allProducts, addToCart, buyNow, wishlist, toggleWishlist, onProductSelect, onQuickView, navigateTo, navigateToShop }) => {
+export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ product, allProducts, categories, addToCart, buyNow, wishlist, toggleWishlist, onProductSelect, onQuickView, navigateTo, navigateToShop }) => {
   const [quantity, setQuantity] = useState(1);
   const [reviews, setReviews] = useState<ProductReview[]>([]);
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });

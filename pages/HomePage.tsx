@@ -8,12 +8,12 @@ import { TopCategories } from '../components/TopCategories';
 import { DealOfTheDay } from '../components/DealOfTheDay';
 import { ReviewsSection } from '../components/ReviewsSection';
 import { OrderTrackingWidget } from '../components/OrderTrackingWidget';
-import { categories } from '../constants';
 import type { Page } from '../App';
-import type { Product } from '../types';
+import type { Product, Category } from '../types';
 
 interface HomePageProps {
     products: Product[];
+    categories?: Category[];
     navigateTo: (page: Page) => void;
     navigateToShop: (categoryId: string) => void;
     onProductSelect: (product: Product) => void;
@@ -50,7 +50,7 @@ const StyleGuide = () => (
 );
 
 
-export const HomePage: React.FC<HomePageProps> = ({ products, navigateTo, navigateToShop, onProductSelect, wishlist, toggleWishlist, addToCart, buyNow, onQuickView }) => {
+export const HomePage: React.FC<HomePageProps> = ({ products, categories = [], navigateTo, navigateToShop, onProductSelect, wishlist, toggleWishlist, addToCart, buyNow, onQuickView }) => {
     const hotDeals = products.filter(p => p.originalPrice).sort((a,b) => b.reviewCount - a.reviewCount).slice(0, 4);
     const newArrivals = [...products].sort((a, b) => (a.id > b.id ? -1 : 1)).slice(0, 8); // Simplistic new arrival logic
     const dealProduct = products.find(p => p.id === 'prod_4') || products[3];
@@ -78,7 +78,7 @@ export const HomePage: React.FC<HomePageProps> = ({ products, navigateTo, naviga
             />
             
             <TopCategories 
-                categories={categories.filter(c => c.id !== 'all')} 
+                categories={categories} 
                 navigateToShop={navigateToShop}
             />
             
@@ -99,6 +99,8 @@ export const HomePage: React.FC<HomePageProps> = ({ products, navigateTo, naviga
                     onQuickView={onQuickView}
                 />
             </section>
+            
+            {/* Simple Product Grid removed per user request */}
 
             {dealProduct && (
                 <DealOfTheDay

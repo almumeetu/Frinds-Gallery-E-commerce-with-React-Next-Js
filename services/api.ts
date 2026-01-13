@@ -1,9 +1,9 @@
-import { supabase } from './supabase';
-import type { Product, Order, Customer, SalesSummary, OrderItem } from '../types';
+import { productServiceAdapter, categoryServiceAdapter } from './backendAdapter';
+import type { Product, Category, Order, Customer, SalesSummary, OrderItem } from '../types';
 import { OrderStatus } from '../types';
 
-// --- REAL SUPABASE BACKEND ---
-// All data now comes from Supabase database
+// --- WORDPRESS GRAPHQL BACKEND ---
+// All data now comes from WordPress via GraphQL
 
 // Local product images mapping
 const productImageMap: { [sku: string]: string } = {
@@ -61,141 +61,105 @@ const mapCustomer = (data: any): Customer => ({
   orderIds: data.order_ids || []
 });
 
-// --- Data Fetching ---
+// --- Data Fetching from WordPress ---
 export const getProducts = async (): Promise<Product[]> => {
-  const { data, error } = await supabase
-    .from('products')
-    .select('*')
-    .order('created_at', { ascending: false });
-
-  if (error) {
-    console.error('Error fetching products:', error);
+  try {
+    return await productServiceAdapter.getAllProducts();
+  } catch (error) {
+    console.error('Error fetching products from WordPress:', error);
     return [];
   }
-  
-  return (data || []).map(mapProduct);
 };
 
-export const getOrders = async (): Promise<Order[]> => {
-  const { data, error } = await supabase
-    .from('orders')
-    .select('*')
-    .order('date', { ascending: false });
-
-  if (error) {
-    console.error('Error fetching orders:', error);
+export const getCategories = async (): Promise<Category[]> => {
+  try {
+    return await categoryServiceAdapter.getAllCategories();
+  } catch (error) {
+    console.error('Error fetching categories from WordPress:', error);
     return [];
   }
-  
-  return (data || []).map(mapOrder);
+};
+
+
+export const getOrders = async (): Promise<Order[]> => {
+  // Orders will be stored locally or in WordPress (future enhancement)
+  console.log('Orders: Using local storage (WordPress orders not yet implemented)');
+  return [];
 };
 
 export const getCustomers = async (): Promise<Customer[]> => {
-  const { data, error } = await supabase
-    .from('customers')
-    .select('*')
-    .order('join_date', { ascending: false });
-
-  if (error) {
-    console.error('Error fetching customers:', error);
-    return [];
-  }
-  
-  return (data || []).map(mapCustomer);
+  // Customers will be managed via WordPress users (future enhancement)
+  console.log('Customers: Using local storage (WordPress customers not yet implemented)');
+  return [];
 };
 
-// --- Authentication ---
+// --- Authentication (Local Storage) ---
 export const login = async (email: string, password: string): Promise<Customer | null> => {
-  const { data, error } = await supabase
-    .from('customers')
-    .select('*')
-    .eq('email', email.toLowerCase())
-    .eq('password', password)
-    .single();
-
-  if (error || !data) {
-    return null;
-  }
-  
-  return mapCustomer(data);
+  // Using localStorage for now (WordPress users integration coming)
+  const customers = JSON.parse(localStorage.getItem('customers') || '[]');
+  const customer = customers.find((c: Customer) => 
+    c.email.toLowerCase() === email.toLowerCase() && c.password === password
+  );
+  return customer || null;
 };
 
 export const register = async (newCustomerData: Omit<Customer, 'id' | 'totalOrders' | 'totalSpent' | 'joinDate' | 'orderIds'>): Promise<Customer> => {
-  const { data, error } = await supabase
-    .from('customers')
-    .insert([{
-      name: newCustomerData.name,
-      email: newCustomerData.email.toLowerCase(),
-      phone: newCustomerData.phone,
-      password: newCustomerData.password,
-      total_orders: 0,
-      total_spent: 0,
-      join_date: new Date().toISOString(),
-      order_ids: []
-    }])
-    .select()
-    .single();
-
-  if (error) {
-    throw new Error('Registration failed: ' + error.message);
-  }
-  
-  return mapCustomer(data);
+  const customers = JSON.parse(localStorage.getItem('customers') || '[]');
+  const newCustomer: Customer = {
+    ...newCustomerData,
+    id: `cust_${Date.now()}`,
+    totalOrders: 0,
+    totalSpent: 0,
+    joinDate: new Date().toISOString(),
+    orderIds: []
+  };
+  customers.push(newCustomer);
+  localStorage.setItem('customers', JSON.stringify(customers));
+  return newCustomer;
 };
 
-// --- Order Management ---
+// --- Order Management (Local Storage) ---
 export const createOrder = async (
   orderData: { customerName: string; totalAmount: number; shippingAddress: string; items: OrderItem[] }, 
   currentUser: Customer | null
 ): Promise<Order> => {
   const orderId = `FG-${Date.now()}`;
+  const orders = JSON.parse(localStorage.getItem('orders') || '[]');
   
-  const { data, error } = await supabase
-    .from('orders')
-    .insert([{
-      order_id: orderId,
-      customer_name: orderData.customerName,
-      customer_id: currentUser?.id,
-      items: orderData.items,
-      total_amount: orderData.totalAmount,
-      shipping_address: orderData.shippingAddress,
-      status: OrderStatus.Processing,
-      date: new Date().toISOString()
-    }])
-    .select()
-    .single();
-
-  if (error) {
-    throw new Error('Order creation failed: ' + error.message);
-  }
-
+  const newOrder: Order = {
+    id: `ord_${Date.now()}`,
+    orderId,
+    customerName: orderData.customerName,
+    customerId: currentUser?.id,
+    items: orderData.items,
+    totalAmount: orderData.totalAmount,
+    shippingAddress: orderData.shippingAddress,
+    status: OrderStatus.Processing,
+    date: new Date().toISOString()
+  };
+  
+  orders.push(newOrder);
+  localStorage.setItem('orders', JSON.stringify(orders));
+  
   // Update customer stats if logged in
   if (currentUser) {
-    await supabase
-      .from('customers')
-      .update({
-        total_orders: currentUser.totalOrders + 1,
-        total_spent: currentUser.totalSpent + orderData.totalAmount,
-        order_ids: [...currentUser.orderIds, data.id]
-      })
-      .eq('id', currentUser.id);
+    const customers = JSON.parse(localStorage.getItem('customers') || '[]');
+    const customerIndex = customers.findIndex((c: Customer) => c.id === currentUser.id);
+    if (customerIndex !== -1) {
+      customers[customerIndex].totalOrders += 1;
+      customers[customerIndex].totalSpent += orderData.totalAmount;
+      customers[customerIndex].orderIds.push(newOrder.id);
+      localStorage.setItem('customers', JSON.stringify(customers));
+    }
   }
   
-  return mapOrder(data);
+  return newOrder;
 };
 
 export const getOrderStatus = async (trackingId: string): Promise<OrderStatus> => {
-  const { data, error } = await supabase
-    .from('orders')
-    .select('status')
-    .eq('order_id', trackingId)
-    .single();
-
-  if (error || !data) {
-    return OrderStatus.NotFound;
-  }
-  
-  return data.status as OrderStatus;
+  const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+  const order = orders.find((o: Order) => o.orderId === trackingId);
+  return order?.status || OrderStatus.NotFound;
 };
 
 export const updateOrderStatus = async (orderId: string, status: Order['status']): Promise<Order> => {
@@ -213,84 +177,27 @@ export const updateOrderStatus = async (orderId: string, status: Order['status']
   return mapOrder(data);
 };
 
-// --- Product Management (Admin) ---
+// --- Product Management (WordPress Admin Panel) ---
 export const addProduct = async (newProductData: Omit<Product, 'id' | 'rating' | 'reviewCount'>): Promise<Product> => {
-  const { data, error } = await supabase
-    .from('products')
-    .insert([{
-      name: newProductData.name,
-      price: newProductData.price,
-      original_price: newProductData.originalPrice,
-      image_url: newProductData.imageUrl,
-      category: newProductData.category,
-      sku: newProductData.sku,
-      stock: newProductData.stock,
-      rating: 0,
-      review_count: 0
-    }])
-    .select()
-    .single();
-
-  if (error) {
-    throw new Error('Product creation failed: ' + error.message);
-  }
-  
-  return mapProduct(data);
+  console.warn('⚠️ Products should be added in WordPress admin panel');
+  throw new Error('Please add products in WordPress admin → Products → Add New');
 };
 
 export const updateProduct = async (updatedProductData: Product): Promise<Product> => {
-  const { data, error } = await supabase
-    .from('products')
-    .update({
-      name: updatedProductData.name,
-      price: updatedProductData.price,
-      original_price: updatedProductData.originalPrice,
-      image_url: updatedProductData.imageUrl,
-      category: updatedProductData.category,
-      sku: updatedProductData.sku,
-      stock: updatedProductData.stock,
-      rating: updatedProductData.rating,
-      review_count: updatedProductData.reviewCount
-    })
-    .eq('id', updatedProductData.id)
-    .select()
-    .single();
-
-  if (error) {
-    throw new Error('Product update failed: ' + error.message);
-  }
-  
-  return mapProduct(data);
+  console.warn('⚠️ Products should be updated in WordPress admin panel');
+  throw new Error('Please update products in WordPress admin → Products → Edit');
 };
 
 export const deleteProduct = async (productId: string): Promise<{ success: boolean }> => {
-  const { error } = await supabase
-    .from('products')
-    .delete()
-    .eq('id', productId);
-
-  if (error) {
-    throw new Error('Product deletion failed: ' + error.message);
-  }
-  
-  return { success: true };
+  console.warn('⚠️ Products should be deleted in WordPress admin panel');
+  throw new Error('Please delete products in WordPress admin → Products → Trash');
 };
 
-// --- Dashboard Widgets ---
+// --- Dashboard Widgets (Local Storage) ---
 export const getSalesSummary = async (): Promise<SalesSummary> => {
-  const { data: orders, error } = await supabase
-    .from('orders')
-    .select('total_amount, status');
-
-  if (error) {
-    return {
-      totalSales: '৳ 0',
-      totalOrders: '0',
-      grossProfit: '৳ 0'
-    };
-  }
-
-  const totalSales = orders.reduce((sum, order) => sum + Number(order.total_amount), 0);
+  const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+  
+  const totalSales = orders.reduce((sum: number, order: Order) => sum + order.totalAmount, 0);
   const totalOrdersCount = orders.length;
   const grossProfit = totalSales * 0.25; // Assuming a 25% fixed margin
 
