@@ -75,11 +75,13 @@ export const testProductsQuery = async () => {
                   price
                   regularPrice
                   salePrice
+                  stockStatus
                 }
                 ... on VariableProduct {
                   price
                   regularPrice
                   salePrice
+                  stockStatus
                 }
                 image {
                   sourceUrl
@@ -181,17 +183,17 @@ export const testCategoriesQuery = async () => {
  */
 export const runAllTests = async () => {
   console.log('\n🧪 Running WordPress GraphQL Connection Tests...\n');
-  
+
   const connectionOk = await testWordPressConnection();
   if (!connectionOk) return false;
 
   console.log('\n');
   const productsOk = await testProductsQuery();
-  
+
   console.log('\n');
   const categoriesOk = await testCategoriesQuery();
 
   console.log('\n✅ All tests completed!\n');
-  
+
   return connectionOk && productsOk && categoriesOk;
 };

@@ -1,4 +1,6 @@
 import { productServiceAdapter, categoryServiceAdapter } from './backendAdapter';
+import { wordpressOrderService, wordpressAuthService, wordpressCheckoutService } from './wordpressGraphQL';
+import { supabase } from './supabase';
 import type { Product, Category, Order, Customer, SalesSummary, OrderItem } from '../types';
 import { OrderStatus } from '../types';
 
@@ -64,7 +66,9 @@ const mapCustomer = (data: any): Customer => ({
 // --- Data Fetching from WordPress ---
 export const getProducts = async (): Promise<Product[]> => {
   try {
-    return await productServiceAdapter.getAllProducts();
+    const products = await productServiceAdapter.getAllProducts();
+    console.log(`[API] Fetched ${products.length} products`);
+    return products;
   } catch (error) {
     console.error('Error fetching products from WordPress:', error);
     return [];
@@ -81,10 +85,14 @@ export const getCategories = async (): Promise<Category[]> => {
 };
 
 
-export const getOrders = async (): Promise<Order[]> => {
-  // Orders will be stored locally or in WordPress (future enhancement)
-  console.log('Orders: Using local storage (WordPress orders not yet implemented)');
-  return [];
+export const getOrders = async (customerId?: string): Promise<Order[]> => {
+  if (!customerId) return [];
+  try {
+    return await wordpressOrderService.getCustomerOrders(customerId);
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    return [];
+  }
 };
 
 export const getCustomers = async (): Promise<Customer[]> => {
@@ -95,65 +103,111 @@ export const getCustomers = async (): Promise<Customer[]> => {
 
 // --- Authentication (Local Storage) ---
 export const login = async (email: string, password: string): Promise<Customer | null> => {
-  // Using localStorage for now (WordPress users integration coming)
-  const customers = JSON.parse(localStorage.getItem('customers') || '[]');
-  const customer = customers.find((c: Customer) => 
-    c.email.toLowerCase() === email.toLowerCase() && c.password === password
-  );
-  return customer || null;
+  try {
+    // Attempt login via WordPress
+    const response = await wordpressAuthService.login(email, password);
+    if (response?.user && response?.authToken) {
+      // Map WP user to App Customer
+      const customer: Customer = {
+        id: String(response.user.databaseId), // Use databaseId as reliable numeric string
+        name: response.user.name || `${response.user.firstName} ${response.user.lastName}`,
+        email: response.user.email,
+        phone: '', // WP doesn't always return phone in basic user query
+        totalOrders: 0,
+        totalSpent: 0,
+        joinDate: new Date().toISOString(),
+        password: '', // Don't store password
+        orderIds: [],
+        token: response.authToken // Store token for future requests
+      } as Customer;
+
+      return customer;
+    }
+  } catch (error) {
+    console.error('Login failed:', error);
+  }
+  return null;
 };
 
 export const register = async (newCustomerData: Omit<Customer, 'id' | 'totalOrders' | 'totalSpent' | 'joinDate' | 'orderIds'>): Promise<Customer> => {
-  const customers = JSON.parse(localStorage.getItem('customers') || '[]');
-  const newCustomer: Customer = {
-    ...newCustomerData,
-    id: `cust_${Date.now()}`,
-    totalOrders: 0,
-    totalSpent: 0,
-    joinDate: new Date().toISOString(),
-    orderIds: []
-  };
-  customers.push(newCustomer);
-  localStorage.setItem('customers', JSON.stringify(customers));
-  return newCustomer;
+  try {
+    const response = await wordpressAuthService.register(newCustomerData);
+    if (response?.user) {
+      return {
+        ...newCustomerData,
+        id: String(response.user.databaseId),
+        totalOrders: 0,
+        totalSpent: 0,
+        joinDate: new Date().toISOString(),
+        orderIds: []
+      } as Customer;
+    }
+    throw new Error('Registration failed');
+  } catch (error) {
+    console.error('Registration error:', error);
+    throw error;
+  }
 };
 
 // --- Order Management (Local Storage) ---
 export const createOrder = async (
-  orderData: { customerName: string; totalAmount: number; shippingAddress: string; items: OrderItem[] }, 
+  orderData: { customerName: string; phone?: string; totalAmount: number; shippingAddress: string; items: OrderItem[]; billing?: any; shipping?: any; note?: string; paymentMethod?: string },
   currentUser: Customer | null
 ): Promise<Order> => {
-  const orderId = `FG-${Date.now()}`;
-  const orders = JSON.parse(localStorage.getItem('orders') || '[]');
-  
-  const newOrder: Order = {
-    id: `ord_${Date.now()}`,
-    orderId,
-    customerName: orderData.customerName,
-    customerId: currentUser?.id,
-    items: orderData.items,
-    totalAmount: orderData.totalAmount,
-    shippingAddress: orderData.shippingAddress,
-    status: OrderStatus.Processing,
-    date: new Date().toISOString()
-  };
-  
-  orders.push(newOrder);
-  localStorage.setItem('orders', JSON.stringify(orders));
-  
-  // Update customer stats if logged in
-  if (currentUser) {
-    const customers = JSON.parse(localStorage.getItem('customers') || '[]');
-    const customerIndex = customers.findIndex((c: Customer) => c.id === currentUser.id);
-    if (customerIndex !== -1) {
-      customers[customerIndex].totalOrders += 1;
-      customers[customerIndex].totalSpent += orderData.totalAmount;
-      customers[customerIndex].orderIds.push(newOrder.id);
-      localStorage.setItem('customers', JSON.stringify(customers));
+  try {
+    // Use WordPress Checkout
+    const result = await wordpressCheckoutService.checkout({
+      items: orderData.items,
+      billing: orderData.billing || {
+        firstName: orderData.customerName.split(' ')[0],
+        lastName: orderData.customerName.split(' ')[1] || 'User',
+        address1: orderData.shippingAddress,
+        city: 'Dhaka',
+        postcode: '1000',
+        country: 'BD',
+        email: currentUser?.email || 'guest@example.com',
+        phone: orderData.phone || '01700000000',
+      },
+      shipping: orderData.shipping,
+      paymentMethod: orderData.paymentMethod || 'cod',
+      note: orderData.note
+    });
+
+    if (result?.order) {
+      // Return mapped order
+      return {
+        id: String(result.order.databaseId),
+        orderId: `ORD-${result.order.orderNumber}`,
+        customerName: orderData.customerName,
+        customerId: currentUser?.id,
+        items: orderData.items,
+        totalAmount: orderData.totalAmount,
+        shippingAddress: orderData.shippingAddress,
+        status: OrderStatus.Processing, // Default until we get real status
+        date: new Date().toISOString()
+      };
     }
+
+    // Fallback if checkout didn't return order object directly but succeeded
+    if (result?.result === 'success') {
+      return {
+        id: 'temp_pending',
+        orderId: 'PENDING',
+        customerName: orderData.customerName,
+        customerId: currentUser?.id,
+        items: orderData.items,
+        totalAmount: orderData.totalAmount,
+        shippingAddress: orderData.shippingAddress,
+        status: OrderStatus.Processing,
+        date: new Date().toISOString()
+      };
+    }
+
+    throw new Error('Checkout failed: ' + JSON.stringify(result));
+  } catch (error) {
+    console.error('Create Order Error:', error);
+    throw error;
   }
-  
-  return newOrder;
 };
 
 export const getOrderStatus = async (trackingId: string): Promise<OrderStatus> => {
@@ -173,7 +227,7 @@ export const updateOrderStatus = async (orderId: string, status: Order['status']
   if (error) {
     throw new Error('Order update failed: ' + error.message);
   }
-  
+
   return mapOrder(data);
 };
 
@@ -196,7 +250,7 @@ export const deleteProduct = async (productId: string): Promise<{ success: boole
 // --- Dashboard Widgets (Local Storage) ---
 export const getSalesSummary = async (): Promise<SalesSummary> => {
   const orders = JSON.parse(localStorage.getItem('orders') || '[]');
-  
+
   const totalSales = orders.reduce((sum: number, order: Order) => sum + order.totalAmount, 0);
   const totalOrdersCount = orders.length;
   const grossProfit = totalSales * 0.25; // Assuming a 25% fixed margin
@@ -207,4 +261,3 @@ export const getSalesSummary = async (): Promise<SalesSummary> => {
     grossProfit: `৳ ${grossProfit.toLocaleString('bn-BD')}`
   };
 };
- 

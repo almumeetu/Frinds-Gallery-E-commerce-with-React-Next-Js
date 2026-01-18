@@ -9,21 +9,22 @@ export interface Product {
   stock: number;
   rating: number;
   reviewCount: number;
+  date?: string;
 }
 
 export interface Category {
-    id: string;
-    name: string;
-    imageUrl?: string;
+  id: string;
+  name: string;
+  imageUrl?: string;
 }
 
 export interface Review {
-    id: number;
-    quote: string;
-    author: string;
-    location: string;
-    rating: number;
-    avatarUrl: string;
+  id: number;
+  quote: string;
+  author: string;
+  location: string;
+  rating: number;
+  avatarUrl: string;
 }
 
 export interface ProductReview {
@@ -50,44 +51,44 @@ export enum OrderStatus {
 }
 
 export interface SalesSummary {
-    totalSales: string;
-    totalOrders: string;
-    grossProfit: string;
+  totalSales: string;
+  totalOrders: string;
+  grossProfit: string;
 }
 
 export interface OrderDetails {
-    orderId: string;
-    customerName: string;
-    totalAmount: number;
+  orderId: string;
+  customerName: string;
+  totalAmount: number;
 }
 
 export interface OrderItem {
-    productId: string;
-    quantity: number;
-    price: number; // Price at the time of order
+  productId: string;
+  quantity: number;
+  price: number; // Price at the time of order
 }
 
 export interface Order {
-    id: string;
-    orderId: string;
-    customerName: string;
-    date: string;
-    totalAmount: number;
-    // FIX: Changed status to use the OrderStatus enum for type safety.
-    status: OrderStatus;
-    items: OrderItem[];
-    shippingAddress: string;
-    customerId?: string;
+  id: string;
+  orderId: string;
+  customerName: string;
+  date: string;
+  totalAmount: number;
+  // FIX: Changed status to use the OrderStatus enum for type safety.
+  status: OrderStatus;
+  items: OrderItem[];
+  shippingAddress: string;
+  customerId?: string;
 }
 
 export interface Customer {
-    id: string;
-    name: string;
-    email: string;
-    phone: string;
-    totalOrders: number;
-    totalSpent: number;
-    joinDate: string;
-    password?: string;
-    orderIds: string[];
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  totalOrders: number;
+  totalSpent: number;
+  joinDate: string;
+  password?: string;
+  orderIds: string[];
 }

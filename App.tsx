@@ -46,36 +46,36 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const loadInitialData = async () => {
-        try {
-            setIsLoading(true);
-            
-            // Test WordPress GraphQL connection on startup (non-blocking) - Only in dev mode
-            if (import.meta.env.DEV) {
-              runAllTests().catch(err => console.warn('WordPress test failed:', err));
-            }
-            
-            // Fetch data independently so one failure doesn't break everything
-            const fetchProducts = api.getProducts().catch(e => { console.error('Products failed:', e); return []; });
-            const fetchCategories = api.getCategories().catch(e => { console.error('Categories failed:', e); return []; });
-            const fetchOrders = api.getOrders().catch(e => { console.error('Orders failed:', e); return []; });
-            const fetchCustomers = api.getCustomers().catch(e => { console.error('Customers failed:', e); return []; });
+      try {
+        setIsLoading(true);
 
-            const [productsData, categoriesData, ordersData, customersData] = await Promise.all([
-                fetchProducts,
-                fetchCategories,
-                fetchOrders,
-                fetchCustomers,
-            ]);
-
-            setProducts(productsData || []);
-            setCategories(categoriesData || []);
-            setOrders(ordersData || []);
-            setCustomers(customersData || []);
-        } catch (error) {
-            console.error("Failed to load initial data", error);
-        } finally {
-            setIsLoading(false);
+        // Test WordPress GraphQL connection on startup (non-blocking) - Only in dev mode
+        if (import.meta.env.DEV) {
+          runAllTests().catch(err => console.warn('WordPress test failed:', err));
         }
+
+        // Fetch data independently so one failure doesn't break everything
+        const fetchProducts = api.getProducts().catch(e => { console.error('Products failed:', e); return []; });
+        const fetchCategories = api.getCategories().catch(e => { console.error('Categories failed:', e); return []; });
+        const fetchOrders = api.getOrders().catch(e => { console.error('Orders failed:', e); return []; });
+        const fetchCustomers = api.getCustomers().catch(e => { console.error('Customers failed:', e); return []; });
+
+        const [productsData, categoriesData, ordersData, customersData] = await Promise.all([
+          fetchProducts,
+          fetchCategories,
+          fetchOrders,
+          fetchCustomers,
+        ]);
+
+        setProducts(productsData || []);
+        setCategories(categoriesData || []);
+        setOrders(ordersData || []);
+        setCustomers(customersData || []);
+      } catch (error) {
+        console.error("Failed to load initial data", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
     loadInitialData();
   }, []);
@@ -84,7 +84,7 @@ const App: React.FC = () => {
     setCurrentPage(page);
     window.scrollTo(0, 0);
   };
-  
+
   const navigateToShop = (categoryId: string = 'all') => {
     setInitialCategory(categoryId);
     navigateTo('shop');
@@ -98,7 +98,7 @@ const App: React.FC = () => {
   const handleQuickView = (product: Product) => {
     setQuickViewProduct(product);
   };
-  
+
   const closeQuickView = () => {
     setQuickViewProduct(null);
   };
@@ -107,9 +107,9 @@ const App: React.FC = () => {
     setCart(prevCart => {
       const existingItem = prevCart.find(item => item.productId === productId);
       if (existingItem) {
-        return prevCart.map(item => 
-          item.productId === productId 
-            ? { ...item, quantity: item.quantity + quantity } 
+        return prevCart.map(item =>
+          item.productId === productId
+            ? { ...item, quantity: item.quantity + quantity }
             : item
         );
       } else {
@@ -123,7 +123,7 @@ const App: React.FC = () => {
       if (quantity <= 0) {
         return prevCart.filter(item => item.productId !== productId);
       }
-      return prevCart.map(item => 
+      return prevCart.map(item =>
         item.productId === productId ? { ...item, quantity } : item
       );
     });
@@ -132,39 +132,39 @@ const App: React.FC = () => {
   const removeFromCart = (productId: string) => {
     setCart(prevCart => prevCart.filter(item => item.productId !== productId));
   };
-  
+
   const clearCart = () => {
     setCart([]);
   }
 
-  const handlePlaceOrder = async (orderData: { customerName: string; totalAmount: number; shippingAddress: string; items: OrderItem[] }) => {
+  const handlePlaceOrder = async (orderData: { customerName: string; phone?: string; totalAmount: number; shippingAddress: string; items: OrderItem[] }) => {
     const newOrder = await api.createOrder(orderData, currentUser);
-    
+
     setOrders(prev => [newOrder, ...prev]);
 
     if (currentUser) {
-        const updatedUser: Customer = { 
-            ...currentUser, 
-            orderIds: [...currentUser.orderIds, newOrder.id],
-            totalOrders: currentUser.totalOrders + 1,
-            totalSpent: currentUser.totalSpent + newOrder.totalAmount
-        };
-        setCustomers(prev => prev.map(c => c.id === currentUser.id ? updatedUser : c));
-        setCurrentUser(updatedUser);
+      const updatedUser: Customer = {
+        ...currentUser,
+        orderIds: [...currentUser.orderIds, newOrder.id],
+        totalOrders: currentUser.totalOrders + 1,
+        totalSpent: currentUser.totalSpent + newOrder.totalAmount
+      };
+      setCustomers(prev => prev.map(c => c.id === currentUser.id ? updatedUser : c));
+      setCurrentUser(updatedUser);
     }
 
     setOrderDetails({
-        orderId: newOrder.orderId,
-        customerName: orderData.customerName,
-        totalAmount: orderData.totalAmount,
+      orderId: newOrder.orderId,
+      customerName: orderData.customerName,
+      totalAmount: orderData.totalAmount,
     });
     clearCart();
     navigateTo('orderSuccess');
   };
 
   const toggleWishlist = (productId: string) => {
-    setWishlist(prev => 
-      prev.includes(productId) 
+    setWishlist(prev =>
+      prev.includes(productId)
         ? prev.filter(id => id !== productId)
         : [...prev, productId]
     );
@@ -214,7 +214,7 @@ const App: React.FC = () => {
       case 'checkout':
         return <CheckoutPage cart={cart} products={products} updateCartQuantity={updateCartQuantity} removeFromCart={removeFromCart} onPlaceOrder={handlePlaceOrder} navigateTo={navigateTo} currentUser={currentUser} />;
       case 'orderSuccess':
-        return <OrderSuccessPage orderDetails={orderDetails} navigateTo={navigateTo}/>;
+        return <OrderSuccessPage orderDetails={orderDetails} navigateTo={navigateTo} />;
       case 'wishlist':
         return <WishlistPage products={products} wishlistProductIds={wishlist} onProductSelect={handleProductSelect} addToCart={addToCart} buyNow={buyNow} toggleWishlist={toggleWishlist} navigateTo={navigateTo} onQuickView={handleQuickView} />;
       case 'admin':
@@ -228,7 +228,7 @@ const App: React.FC = () => {
       case 'contact':
         return <ContactPage navigateTo={navigateTo} />;
       case 'account':
-        return currentUser 
+        return currentUser
           ? <AccountPage navigateTo={navigateTo} currentUser={currentUser} orders={orders.filter(o => currentUser.orderIds.includes(o.id))} onLogout={handleLogout} />
           : <AuthPage navigateTo={navigateTo} onLogin={handleLogin} onRegister={handleRegister} />;
       case 'returns':
@@ -240,20 +240,20 @@ const App: React.FC = () => {
         return <HomePage products={products} categories={categories} navigateTo={navigateTo} navigateToShop={navigateToShop} onProductSelect={handleProductSelect} wishlist={wishlist} toggleWishlist={toggleWishlist} addToCart={addToCart} buyNow={buyNow} onQuickView={handleQuickView} />;
     }
   };
-  
-    if (isLoading) {
-        return (
-            <div className="min-h-screen bg-brand-cream flex items-center justify-center">
-                <div className="flex flex-col items-center">
-                    <svg className="animate-spin h-12 w-12 text-brand-green" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    <p className="mt-4 text-lg text-slate-600">লোড হচ্ছে...</p>
-                </div>
-            </div>
-        );
-    }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-brand-cream flex items-center justify-center">
+        <div className="flex flex-col items-center">
+          <svg className="animate-spin h-12 w-12 text-brand-green" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <p className="mt-4 text-lg text-slate-600">লোড হচ্ছে...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-brand-cream text-brand-dark flex flex-col">
@@ -267,13 +267,13 @@ const App: React.FC = () => {
       <MobileBottomNav currentPage={currentPage} navigateTo={navigateTo} />
       {quickViewProduct && (
         <QuickViewModal
-            product={quickViewProduct}
-            onClose={closeQuickView}
-            addToCart={addToCart}
-            buyNow={buyNow}
-            wishlist={wishlist}
-            toggleWishlist={toggleWishlist}
-          />
+          product={quickViewProduct}
+          onClose={closeQuickView}
+          addToCart={addToCart}
+          buyNow={buyNow}
+          wishlist={wishlist}
+          toggleWishlist={toggleWishlist}
+        />
       )}
     </div>
   );

@@ -14,12 +14,12 @@ interface ProductsGridProps {
 
 export const ProductsGrid: React.FC<ProductsGridProps> = ({ products, onProductSelect, addToCart, buyNow, wishlist, toggleWishlist, onQuickView }) => {
     return (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {products.map(product => (
-                <MobileProductCard 
-                    key={product.id} 
-                    product={product} 
-                    onProductSelect={onProductSelect} 
+                <MobileProductCard
+                    key={product.id}
+                    product={product}
+                    onProductSelect={onProductSelect}
                     addToCart={addToCart}
                     buyNow={buyNow}
                     isInWishlist={wishlist.includes(product.id)}
